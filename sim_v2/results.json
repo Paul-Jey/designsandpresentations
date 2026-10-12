@@ -1,0 +1,324 @@
+{
+  "reference_day": {
+    "E_base_kwh": 1803.8350666666668,
+    "E_ctrl_kwh": 1627.820482389323,
+    "saving_kwh": 176.01458427734383,
+    "saving_pct": 9.757798123007097,
+    "by_load_base": {
+      "CNC machines": 1039.1375,
+      "Compressor": 262.2975666666666,
+      "Conveyor": 35.19999999999999,
+      "Lighting": 230.4000000000001,
+      "Ventilation fans": 236.8
+    },
+    "by_load_ctrl": {
+      "CNC machines": 949.5290323893229,
+      "Compressor": 253.7352277777778,
+      "Conveyor": 30.989444444444437,
+      "Lighting": 189.594,
+      "Ventilation fans": 203.97277777777776
+    },
+    "md_base_kva": 135.34562962962963,
+    "md_ctrl_kva": 132.01782716049382,
+    "peak_base_kw": 126.09,
+    "peak_ctrl_kw": 126.09,
+    "avg_base_kw": 75.15979444444446,
+    "avg_ctrl_kw": 67.6314087906449,
+    "ier_base": 0.14815194116417,
+    "ier_ctrl": 0.10912333453088059,
+    "standby_events": 87,
+    "nuisance_events": 5,
+    "false_standby_events": 0,
+    "warmup_kwh": 4.666666666666666
+  },
+  "S1": {
+    "machine": 0,
+    "shift": "06:00-14:00",
+    "E_base_kwh": 45.65,
+    "E_ctrl_kwh": 43.39263916015625,
+    "saving_pct": 4.9449306458789675
+  },
+  "S3": {
+    "CNC machines": {
+      "base": 1039.1375,
+      "ctrl": 949.5290323893229,
+      "saving_pct": 8.623350385360663
+    },
+    "Compressor": {
+      "base": 262.2975666666666,
+      "ctrl": 253.7352277777778,
+      "saving_pct": 3.2643607783712447
+    },
+    "Conveyor": {
+      "base": 35.19999999999999,
+      "ctrl": 30.989444444444437,
+      "saving_pct": 11.96180555555555
+    },
+    "Lighting": {
+      "base": 230.4000000000001,
+      "ctrl": 189.594,
+      "saving_pct": 17.710937500000036
+    },
+    "Ventilation fans": {
+      "base": 236.8,
+      "ctrl": 203.97277777777776,
+      "saving_pct": 13.86284722222223
+    }
+  },
+  "S4": {
+    "lf_base": 0.5960805333051348,
+    "lf_ctrl": 0.5363740882753977,
+    "peak_base_kw": 126.09,
+    "peak_ctrl_kw": 126.09,
+    "avg_base_kw": 75.15979444444444,
+    "avg_ctrl_kw": 67.6314087906449,
+    "md_base_kva": 135.34562962962963,
+    "md_ctrl_kva": 132.01782716049382
+  },
+  "S5": {
+    "days": 1000,
+    "mean_pct": 8.475968097054807,
+    "p5_pct": 6.62365886750165,
+    "p50_pct": 8.449421672901192,
+    "p95_pct": 10.591861130113879,
+    "positive_days_pct": 100.0,
+    "mean_E_base_kwh": 1778.1691758666668,
+    "mean_E_ctrl_kwh": 1627.187134660916,
+    "annual": {
+      "kwh": 45294.612361725296,
+      "rs_energy": 339709.5927129397,
+      "rs_demand": 7098.296462919563,
+      "rs_total": 346807.8891758593,
+      "co2_t": 32.15917477682496,
+      "e_save_day": 150.982041205751
+    },
+    "ier_base_mean": 0.13856178268197955,
+    "ier_ctrl_mean": 0.10954270564335948,
+    "md_base_mean": 134.4172551111111,
+    "md_ctrl_mean": 133.1586283528416,
+    "lf_base_mean": 0.5875991936535632,
+    "lf_ctrl_mean": 0.5367100322669697,
+    "by_load_saving_kwh_day": {
+      "CNC machines": 68.45266978352869,
+      "Compressor": 9.05842336666667,
+      "Conveyor": 4.152774999999992,
+      "Lighting": 38.16202500000007,
+      "Ventilation fans": 31.156148055555562
+    },
+    "nuisance_per_machine_shift": 0.29755,
+    "false_standby_per_machine_shift": 0.0039
+  },
+  "S6": {
+    "reference_rs": 351449.6288499051,
+    "cases": [
+      {
+        "name": "Advisory compliance 0.3 / 0.9",
+        "low_input_rs": 342338.2512864286,
+        "high_input_rs": 360487.8090867215
+      },
+      {
+        "name": "Standby timer T1 15 / 2 min",
+        "low_input_rs": 298315.51355449494,
+        "high_input_rs": 356979.82690898713
+      },
+      {
+        "name": "Shifts per day 3 / 1",
+        "low_input_rs": 392169.1657595363,
+        "high_input_rs": 302461.94606947165
+      },
+      {
+        "name": "Tariff \u20b96.50 / \u20b98.50 per kWh",
+        "low_input_rs": 305579.7885719754,
+        "high_input_rs": 397319.4691278349
+      },
+      {
+        "name": "Idle events \u00d70.5 / \u00d71.5",
+        "low_input_rs": 296893.80823663593,
+        "high_input_rs": 396143.7988142243
+      },
+      {
+        "name": "Idle power ratio 0.25 / 0.55",
+        "low_input_rs": 267493.76036032167,
+        "high_input_rs": 435405.5028326526
+      }
+    ]
+  },
+  "S7": [
+    {
+      "T1_min": 1,
+      "saving_pct": 8.884448468490069,
+      "nuisance_per_machine_shift": 0.5186666666666666,
+      "false_standby_per_machine_shift": 0.04933333333333333
+    },
+    {
+      "T1_min": 2,
+      "saving_pct": 8.73938799868855,
+      "nuisance_per_machine_shift": 0.2763333333333333,
+      "false_standby_per_machine_shift": 0.008
+    },
+    {
+      "T1_min": 3,
+      "saving_pct": 8.600859029713023,
+      "nuisance_per_machine_shift": 0.2986666666666667,
+      "false_standby_per_machine_shift": 0.004333333333333333
+    },
+    {
+      "T1_min": 5,
+      "saving_pct": 8.32577746560613,
+      "nuisance_per_machine_shift": 0.6243333333333333,
+      "false_standby_per_machine_shift": 0.0006666666666666668
+    },
+    {
+      "T1_min": 8,
+      "saving_pct": 7.934348018705762,
+      "nuisance_per_machine_shift": 0.9516666666666668,
+      "false_standby_per_machine_shift": 0.0
+    },
+    {
+      "T1_min": 10,
+      "saving_pct": 7.698312043077067,
+      "nuisance_per_machine_shift": 1.7469999999999999,
+      "false_standby_per_machine_shift": 0.003333333333333333
+    },
+    {
+      "T1_min": 15,
+      "saving_pct": 7.270071213107775,
+      "nuisance_per_machine_shift": 0.16933333333333334,
+      "false_standby_per_machine_shift": 0.0023333333333333335
+    },
+    {
+      "T1_min": 20,
+      "saving_pct": 7.043240929022448,
+      "nuisance_per_machine_shift": 0.11433333333333333,
+      "false_standby_per_machine_shift": 0.0
+    },
+    {
+      "T1_min": 30,
+      "saving_pct": 6.680043730214682,
+      "nuisance_per_machine_shift": 0.08566666666666667,
+      "false_standby_per_machine_shift": 0.001
+    }
+  ],
+  "S8": {
+    "node_kwh_yr": 131.4,
+    "node_rs_yr": 985.5,
+    "rs_per_machine_yr": 34680.78891758593,
+    "rows": [
+      {
+        "machines": 1,
+        "reuse_cctv": true,
+        "cost_rs": 24900.0,
+        "net_rs_yr": 33695.28891758593,
+        "payback_months": 8.867708501649116
+      },
+      {
+        "machines": 2,
+        "reuse_cctv": true,
+        "cost_rs": 25500.0,
+        "net_rs_yr": 68376.07783517186,
+        "payback_months": 4.475249380896737
+      },
+      {
+        "machines": 3,
+        "reuse_cctv": true,
+        "cost_rs": 26100.0,
+        "net_rs_yr": 103056.86675275779,
+        "payback_months": 3.0390987992230882
+      },
+      {
+        "machines": 4,
+        "reuse_cctv": true,
+        "cost_rs": 26700.0,
+        "net_rs_yr": 137737.65567034372,
+        "payback_months": 2.3261612697026997
+      },
+      {
+        "machines": 6,
+        "reuse_cctv": true,
+        "cost_rs": 27900.0,
+        "net_rs_yr": 207099.23350551559,
+        "payback_months": 1.6166163164050698
+      },
+      {
+        "machines": 8,
+        "reuse_cctv": true,
+        "cost_rs": 29100.0,
+        "net_rs_yr": 276460.81134068745,
+        "payback_months": 1.2631084973908826
+      },
+      {
+        "machines": 10,
+        "reuse_cctv": true,
+        "cost_rs": 30300.0,
+        "net_rs_yr": 345822.3891758593,
+        "payback_months": 1.051406766538474
+      },
+      {
+        "machines": 1,
+        "reuse_cctv": false,
+        "cost_rs": 27900.0,
+        "net_rs_yr": 33695.28891758593,
+        "payback_months": 9.936107116305635
+      },
+      {
+        "machines": 2,
+        "reuse_cctv": false,
+        "cost_rs": 28500.0,
+        "net_rs_yr": 68376.07783517186,
+        "payback_months": 5.0017493080610596
+      },
+      {
+        "machines": 3,
+        "reuse_cctv": false,
+        "cost_rs": 29100.0,
+        "net_rs_yr": 103056.86675275779,
+        "payback_months": 3.388420500283213
+      },
+      {
+        "machines": 4,
+        "reuse_cctv": false,
+        "cost_rs": 29700.0,
+        "net_rs_yr": 137737.65567034372,
+        "payback_months": 2.5875277045007556
+      },
+      {
+        "machines": 6,
+        "reuse_cctv": false,
+        "cost_rs": 33900.0,
+        "net_rs_yr": 207099.23350551559,
+        "payback_months": 1.9642757392878805
+      },
+      {
+        "machines": 8,
+        "reuse_cctv": false,
+        "cost_rs": 35100.0,
+        "net_rs_yr": 276460.81134068745,
+        "payback_months": 1.5235432391209616
+      },
+      {
+        "machines": 10,
+        "reuse_cctv": false,
+        "cost_rs": 39300.0,
+        "net_rs_yr": 345822.3891758593,
+        "payback_months": 1.3637058061043574
+      }
+    ],
+    "full_shop_cost_rs": 96300.0,
+    "full_shop_payback_months": 3.3415997233549524,
+    "full_shop_cost_new_cams_rs": 105300.0,
+    "full_shop_payback_new_cams_months": 3.6538987629208357,
+    "node_share_of_saving_pct": 0.2901007275448839
+  },
+  "S9": {
+    "E_base": 17.0,
+    "E_ctrl": 13.799999999999999,
+    "saving_kwh": 3.200000000000001,
+    "saving_pct": 18.823529411764714,
+    "annual_kwh": 1168.0000000000005,
+    "gross_rs": 9344.000000000004,
+    "net_rs": 8468.000000000004,
+    "payback_gross_months": 22.47431506849314,
+    "payback_net_months": 24.799244213509674,
+    "net_retained_pct": 90.625
+  }
+}

@@ -1,0 +1,121 @@
+# sim_v2 assumptions. Every value is either SOURCED (ref id from 03_RESEARCH_FINDINGS.md)
+# or ASSUMED (engineering estimate, swept in sensitivity S6 where it matters).
+meta:
+  model: "model v2"
+  seed: 2026
+  dt_s: 10                    # time step (s)
+  days_per_year: 300          # ASSUMED: 6-day week, holidays removed
+  mc_days: 1000
+
+shop:                          # Reference Indian MSME machining shop (ASSUMED layout)
+  n_machines: 10
+  whitelist_auto: [0, 1, 2, 3, 4, 5]   # general-purpose machines: AUTO standby + deep standby
+  precision_advisory: [6, 7, 8, 9]     # precision machines: ADVISORY only, never deep standby
+  zones:                       # machine index lists per floor zone; zone 3 = aisle/stores/inspection
+    - [0, 1, 2]
+    - [3, 4, 5]
+    - [6, 7, 8, 9]
+    - []
+  conveyor_line: [0, 1, 2, 3, 4]
+  shifts: [[6, 14], [14, 22]]  # hours; 2-shift baseline (swept 1/3 in S6)
+
+machine_power_kw:              # per CNC vertical machining centre
+  processing: 7.5              # ASSUMED, consistent with N6 (13 kW roughing on a larger VMC)
+  idle: 3.0                    # ASSUMED: 40 % of processing; fixed/aux load (N1-N4); swept 0.25-0.55
+  standby: 1.2                 # ASSUMED: coolant pump, chip conveyor, hydraulics, lamp off
+  deep_standby: 0.35           # ASSUMED: CNC control only
+  warmup_kw: 4.0               # ASSUMED: warm-up cycle power after deep standby
+  warmup_min: 10               # ASSUMED (N22: thermal stability needs warm-up)
+
+other_loads_kw:
+  conveyor: 2.2                # ASSUMED
+  compressor_full: 22.0        # ASSUMED 22 kW screw compressor, load/unload
+  compressor_unload_frac: 0.30 # ASSUMED unloaded power fraction
+  compressor_leak_frac: 0.25   # SOURCED range N9 (20-30 % of output, poorly maintained)
+  compressor_demand_per_proc_machine: 0.06   # ASSUMED fraction of capacity
+  lighting_per_zone: 3.6       # ASSUMED 24 x 150 W LED high-bay per zone
+  lighting_dim_frac: 0.10      # ASSUMED aisle-safety level when zone empty
+  fan_per_zone: 3.7            # ASSUMED one 3.7 kW extraction / ventilation fan per zone
+  power_factor: 0.90           # ASSUMED plant PF for kVA
+
+operations:                    # per machine per shift (ASSUMED; scaled together in S6 "idle events")
+  cycle_proc_min: 12           # mean machining cycle
+  load_unload_min: 2           # operator present, machine idle
+  setup_start_min: 10          # start-of-shift set-up (attended idle)
+  tea_breaks_h: [2, 6]         # hours after shift start
+  tea_min: 15
+  lunch_h: 4
+  lunch_min: 30
+  changeover_min: 15           # end of shift: 5 attended + 10 unattended
+  material_wait_rate: 1.5      # Poisson events / shift
+  material_wait_median_min: 15
+  material_wait_sigma: 0.6     # lognormal sigma
+  material_wait_p_absent: 0.7  # operator leaves (stores, crane)
+  tool_change_rate: 2.0
+  tool_change_min: 8          # exponential mean
+  breakdown_prob: 0.08         # per machine-shift
+  breakdown_min: [45, 120]
+  breakdown_p_absent: 0.6
+  short_absence_rate: 3.0
+  short_absence_min: 5        # exponential mean
+  night_left_on_prob: 0.30     # machine left powered (idle) overnight in baseline
+  aisle_busy_mean_min: 6       # zone 3 occupied spells
+  aisle_empty_mean_min: 10     # zone 3 empty spells
+
+detection:                     # camera + filter (v1 values kept)
+  miss_prob: 0.10              # per-sample miss (v1 assumption)
+  false_pos_prob: 0.002
+  occlusion_rate: 2.0          # bursts / operator-shift where operator present but not visible
+  occlusion_mean_s: 90
+  rise_hold_s: 10
+  fall_hold_s: 60
+  ct_off_hold_s: 30
+
+control:
+  T1_min: 3                    # unattended -> standby (chosen from S7 timer study)
+  T2_min: 30                   # unattended -> deep standby (whitelist only)
+  advisory_compliance: 0.6     # fraction of alerts acted on (ASSUMED, swept)
+  advisory_delay_min: 3
+  conveyor_hold_min: 2
+  compressor_hold_min: 5
+  light_hold_min: 2
+  fan_hold_min: 5
+  nuisance_window_min: 5       # standby counted "nuisance" if person/activity returns within this
+
+tariff:                        # TN HT-I (N16-N18)
+  energy_rs_per_kwh: 7.50
+  demand_rs_per_kva_month: 608
+  contract_demand_kva: 130     # ASSUMED
+  billing_floor_frac: 0.90
+  days_per_month: 25
+
+carbon:
+  ef_kg_per_kwh: 0.710         # CEA v21 (N20)
+
+node:                          # indicative prices (ASSUMED, Oct 2026 retail)
+  jetson_rs: 13000
+  psu_sd_enclosure_rs: 3300
+  relay_io_modbus_rs: 3500
+  ct_per_machine_rs: 600
+  ct_interface_rs: 2500
+  camera_rs: 3000              # per IP camera if CCTV not reusable
+  machines_per_camera: 4
+  install_misc_rs: 2000
+  node_power_w: 15
+  node_hours_per_year: 8760
+
+site_actuation:                # full-shop actuation hardware + labour (ASSUMED indicative)
+  lighting_zone_rs: 6000       # contactor / 0-10 V dimming interface per zone
+  fan_contactor_rs: 3000       # per zone fan
+  conveyor_compressor_rs: 5000 # conveyor interlock + line isolation solenoid valve
+  integration_rs: 25000        # wiring, PLC/Modbus mapping, commissioning
+
+office_v1:                     # S9: Review 3 office room, kept for generality
+  powers_kw: {Unoccupied: 0.30, Economy: 1.20, Comfort: 1.70, HighDemand: 2.00}
+  hours: {Unoccupied: 2, Economy: 2, Comfort: 4, HighDemand: 2}
+  baseline_kw: 1.70
+  baseline_h: 10
+  tariff: 8.0
+  days: 365
+  node_cost: 17500
+  node_w: 12.5
