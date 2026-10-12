@@ -1,5 +1,9 @@
-We express our sincere gratitude to our Founder, Dr. Shiv Nadar, and to the management of Sri Sivasubramaniya Nadar College of Engineering for providing the facilities that made this project possible. We thank our Principal for the support extended to us, and Dr. V. Rajini, Professor and Head, Department of Electrical and Electronics Engineering, for her encouragement and for the facilities of the department throughout the course of this work.
+We express our sincere gratitude to the management of Sri Sivasubramaniya Nadar College of Engineering for providing the facilities for this project.
 
-We are deeply grateful to our guide, Dr. Rajesh Panda, Professor, Department of Electrical and Electronics Engineering, for his guidance, patience and steady encouragement at every stage of the project. His questions pushed us to quantify our claims and to be honest about what we had built and what we had modelled.
+We are thankful to Dr. S. Radha, Principal, Sri Sivasubramaniya Nadar College of Engineering, for the support and encouragement extended to us throughout our course of study.
 
-We thank the members of the review panel and the industry experts whose comments at the third review led us to extend this work to manufacturing. We also thank the laboratory staff of the department for their help with the hardware, and our families and friends for their constant support.
+We thank Dr. V. Rajini, Professor and Head, Department of Electrical and Electronics Engineering, for her encouragement and support throughout this work.
+
+We are deeply grateful to our project guide, Dr. Rajesh Panda, Professor, Department of Electrical and Electronics Engineering, for his guidance and encouragement at every stage of the project.
+
+We thank the project coordinators of the department for organising the reviews and for their timely guidance. We also thank the review panel, the laboratory staff, and our families and friends for their constant support.
