@@ -1,0 +1,20 @@
+<section id="robustness" style="background:#FCFCFB;color:#1F2937;font-family:Arial, Helvetica, sans-serif;padding:72px 112px 260px;display:flex;flex-direction:column;gap:20px">
+<h2 style="font-size:64px;font-weight:700;color:#2F4F8F;text-align:center">Robustness: Monte-Carlo and Timer Study</h2>
+<div style="display:flex;flex-direction:row;gap:28px">
+<img src="/_blob/65f65668e4ffadcb00fcf76ecf7e86ce" alt="Histogram of daily saving over 1,000 simulated days: mean 8.5 %, P5 6.6 %, P95 10.6 %" style="width:740px;height:424px;object-fit:contain;background:#FFFFFF;border:2px solid #E5E7EB;border-radius:10px">
+<img src="/_blob/61334841a79fd97df13d01c73f62dd4b" alt="Timer T1 versus saving and nuisance standby events; nuisance peaks near the 15-minute tea break" style="width:928px;height:424px;object-fit:contain;background:#FFFFFF;border:2px solid #E5E7EB;border-radius:10px">
+</div>
+<div style="display:flex;flex-direction:row;gap:20px;justify-content:center">
+<p style="font-size:28px;background:#F3F6FA;border:2px solid #D5DEEA;border-radius:40px;padding:10px 26px"><b>1,000</b> random days</p>
+<p style="font-size:28px;background:#F3F6FA;border:2px solid #D5DEEA;border-radius:40px;padding:10px 26px">mean <b>8.5 %</b></p>
+<p style="font-size:28px;background:#F3F6FA;border:2px solid #D5DEEA;border-radius:40px;padding:10px 26px">P5 to P95 <b>6.6 to 10.6 %</b></p>
+<p style="font-size:28px;background:#F3F6FA;border:2px solid #D5DEEA;border-radius:40px;padding:10px 26px">T1 = 3 min: <b>0.30</b> nuisance per machine-shift</p>
+</div>
+<p style="position:absolute;left:72px;top:36px;font-size:24px;font-weight:700;color:#2F4F8F;background:#EEF2F8;border:3px dashed #2F4F8F;border-radius:40px;padding:6px 22px">MODELLED</p>
+<p style="position:absolute;right:56px;top:36px;width:80px;text-align:right;font-size:32px;font-weight:700;color:#1F3FBF">11</p>
+<div style="position:absolute;left:112px;bottom:128px;width:1696px;padding:22px 40px;background:#EEF2F8;border:3px dashed #2F4F8F;border-radius:16px"><p style="font-size:32px;font-weight:700;font-style:italic;color:#1F3A68;text-align:center">Saving is positive on every simulated day; a timer just under the break length is the worst choice.</p></div>
+<div style="position:absolute;left:0;bottom:44px;width:1500px;height:14px;background:#8DB3D6"></div>
+<div style="position:absolute;left:0;bottom:0;width:1440px;height:44px;background:#1F4E8C"></div>
+<img src="/_blob/8e4e05449653644aebae929bd7ae1991" alt="SSN logo" style="position:absolute;right:56px;bottom:16px;width:220px;height:90px;object-fit:contain">
+<aside>Timer study is the strongest engineering result. With T1 = 10 min a machine sleeps 10 minutes into a 15-minute tea break and the operator returns within 5 minutes: 1.75 nuisance events per machine-shift. T1 = 3 min gives more saving (8.6 %) and fewer nuisance events (0.30). T1 = 1 min raises false standbys when the operator is briefly hidden. Better still: send a planned pause at the start of scheduled breaks. Sensitivity (report, S6): the idle-to-processing power ratio matters most, so it must be measured first.</aside>
+</section>

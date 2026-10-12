@@ -1,0 +1,28 @@
+<section id="energymodel" style="background:#FCFCFB;color:#1F2937;font-family:Arial, Helvetica, sans-serif;padding:72px 112px 260px;display:flex;flex-direction:column;gap:28px">
+<h2 style="font-size:64px;font-weight:700;color:#2F4F8F;text-align:center">Electrical Energy Model</h2>
+<div style="display:flex;flex-direction:row;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:30px;font-family:'Times New Roman', serif;font-style:italic;background:#F3F6FA;border:2px solid #D5DEEA;border-radius:10px;padding:12px 22px">P_shop(t) = Σ P_k(t) + P_comp + P_conv + Σ (P_light + P_fan)</p>
+<p style="font-size:30px;font-family:'Times New Roman', serif;font-style:italic;background:#F3F6FA;border:2px solid #D5DEEA;border-radius:10px;padding:12px 22px">E = Σ P(t)·Δt ;  E_saved = E_base − E_ctrl</p>
+<p style="font-size:30px;font-family:'Times New Roman', serif;font-style:italic;background:#F3F6FA;border:2px solid #D5DEEA;border-radius:10px;padding:12px 22px">MD = max over 15 min of P̄ / PF   (kVA)</p>
+<p style="font-size:30px;font-family:'Times New Roman', serif;font-style:italic;background:#F3F6FA;border:2px solid #D5DEEA;border-radius:10px;padding:12px 22px">Bill = E·c_E + max(MD, 0.9·CD)·c_D</p>
+<p style="font-size:30px;font-family:'Times New Roman', serif;font-style:italic;background:#F3F6FA;border:2px solid #D5DEEA;border-radius:10px;padding:12px 22px">IER = E_non-processing / E_total ;  CO₂ = E_saved × EF</p>
+</div>
+<div style="width:640px;display:flex;flex-direction:column;gap:10px;background:#EEF2F8;border:3px dashed #2F4F8F;border-radius:16px;padding:26px 32px">
+<p style="font-size:26px;font-weight:700;color:#2F4F8F;letter-spacing:2px">REFERENCE SHOP · INPUTS</p>
+<p style="font-size:26px;line-height:1.35">10 CNC machines, 2 shifts, 300 days/yr</p>
+<p style="font-size:26px;line-height:1.35">7.5 / 3.0 / 1.2 / 0.35 kW per machine state</p>
+<p style="font-size:26px;line-height:1.35">22 kW compressor, 2.2 kW conveyor, 4 zones of lights and fans</p>
+<p style="font-size:26px;line-height:1.35">₹7.50/kWh + ₹608/kVA/month (TNERC HT-I)</p>
+<p style="font-size:26px;line-height:1.35">EF 0.710 kg CO₂/kWh (CEA v21)</p>
+<p style="font-size:26px;line-height:1.35">Δt = 10 s, fixed seed, one assumptions file</p>
+</div>
+</div>
+<p style="position:absolute;left:72px;top:36px;font-size:24px;font-weight:700;color:#2F4F8F;background:#EEF2F8;border:3px dashed #2F4F8F;border-radius:40px;padding:6px 22px">MODELLED</p>
+<p style="position:absolute;right:56px;top:36px;width:80px;text-align:right;font-size:32px;font-weight:700;color:#1F3FBF">9</p>
+<div style="position:absolute;left:112px;bottom:128px;width:1696px;padding:26px 40px;background:#EEF2F8;border:3px dashed #2F4F8F;border-radius:16px"><p style="font-size:34px;font-weight:700;font-style:italic;color:#1F3A68;text-align:center">Factory bills charge energy and demand, so the model tracks both kWh and kVA.</p></div>
+<div style="position:absolute;left:0;bottom:44px;width:1500px;height:14px;background:#8DB3D6"></div>
+<div style="position:absolute;left:0;bottom:0;width:1440px;height:44px;background:#1F4E8C"></div>
+<img src="/_blob/8e4e05449653644aebae929bd7ae1991" alt="SSN logo" style="position:absolute;right:56px;bottom:16px;width:220px;height:90px;object-fit:contain">
+<aside>Stochastic shift model: random material waits, tool changes, breakdowns, short absences, tea breaks and lunch; 30 % of machines left on overnight in the baseline. Detector model keeps the Phase I 10 % miss rate and adds occlusion bursts. Every number on later slides comes from this code; none is typed by hand.</aside>
+</section>

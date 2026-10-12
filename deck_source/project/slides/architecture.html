@@ -1,0 +1,18 @@
+<section id="architecture" style="background:#FCFCFB;color:#1F2937;font-family:Arial, Helvetica, sans-serif;padding:72px 112px 260px;display:flex;flex-direction:column;gap:20px;align-items:center">
+<h2 style="font-size:64px;font-weight:700;color:#2F4F8F;text-align:center">System Architecture</h2>
+<img src="/_blob/cf0241be9da7131eef1f24bbef0b9ecd" alt="Three-row architecture: implemented edge node pipeline, modelled manufacturing decision layer, future integration and metering" style="width:1100px;height:620px;object-fit:contain">
+<div style="position:absolute;left:1340px;top:330px;width:460px;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:700;color:#2E7D32;background:#E8F3E9;border:3px solid #2E7D32;border-radius:40px;padding:4px 18px;text-align:center">IMPLEMENTED</p>
+<p style="font-size:26px;line-height:1.3">Camera to filtered person count on the Jetson</p>
+<p style="font-size:24px;font-weight:700;color:#2F4F8F;background:#EEF2F8;border:3px dashed #2F4F8F;border-radius:40px;padding:4px 18px;text-align:center">MODELLED</p>
+<p style="font-size:26px;line-height:1.3">ROIs, CT activity, state machine, zone rules, kW to ₹</p>
+<p style="font-size:24px;font-weight:700;color:#6B7280;background:#F1F2F4;border:3px dashed #9CA3AF;border-radius:40px;padding:4px 18px;text-align:center">FUTURE</p>
+<p style="font-size:26px;line-height:1.3">MQTT, Modbus, PROFIenergy, metered M&amp;V</p>
+</div>
+<p style="position:absolute;right:56px;top:36px;width:80px;text-align:right;font-size:32px;font-weight:700;color:#1F3FBF">6</p>
+<div style="position:absolute;left:112px;bottom:128px;width:1696px;padding:26px 40px;background:#EEF2F8;border:3px dashed #2F4F8F;border-radius:16px"><p style="font-size:34px;font-weight:700;font-style:italic;color:#1F3A68;text-align:center">The AI does not save electricity; the decision layer it feeds does.</p></div>
+<div style="position:absolute;left:0;bottom:44px;width:1500px;height:14px;background:#8DB3D6"></div>
+<div style="position:absolute;left:0;bottom:0;width:1440px;height:44px;background:#1F4E8C"></div>
+<img src="/_blob/8e4e05449653644aebae929bd7ae1991" alt="SSN logo" style="position:absolute;right:56px;bottom:16px;width:220px;height:90px;object-fit:contain">
+<aside>Walk the three rows top to bottom. Stress the second sensor: the camera sees the operator but not the cutting inside an enclosure; the CT clamp sees the cutting but not the operator. Together they separate idle-attended from idle-unattended.</aside>
+</section>

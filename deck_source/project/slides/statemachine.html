@@ -1,0 +1,25 @@
+<section id="statemachine" style="background:#FCFCFB;color:#1F2937;font-family:Arial, Helvetica, sans-serif;padding:72px 112px 260px;display:flex;flex-direction:column;gap:24px;align-items:center">
+<h2 style="font-size:64px;font-weight:700;color:#2F4F8F;text-align:center">Machine State Machine</h2>
+<img src="/_blob/2c16ad2b5be65fb3dd466ca81f1922bb" alt="Four states: processing 7.5 kW, idle-attended 3.0 kW, idle-unattended to standby 1.2 kW after T1, deep standby 0.35 kW after T2 for whitelisted machines" style="width:1300px;height:420px;object-fit:contain">
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;width:1696px">
+<div style="display:flex;flex-direction:column;gap:8px;background:#EEF2F8;border:2px solid #C7D2E5;border-radius:14px;padding:20px 26px">
+<h3 style="font-size:32px;font-weight:700;color:#2F4F8F">ADVISORY (default)</h3>
+<p style="font-size:26px;line-height:1.3">Alert to supervisor: machine, minutes unattended, ₹ per hour lost</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#E8F3E9;border:2px solid #A9CFAB;border-radius:14px;padding:20px 26px">
+<h3 style="font-size:32px;font-weight:700;color:#2E7D32">AUTO (whitelist)</h3>
+<p style="font-size:26px;line-height:1.3">Relay, Modbus, VFD or PROFIenergy pause; T1 = 3 min, T2 = 30 min</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#FBEFEF;border:2px solid #E3B3B3;border-radius:14px;padding:20px 26px">
+<h3 style="font-size:32px;font-weight:700;color:#9B2C2C">Never</h3>
+<p style="font-size:26px;line-height:1.3">Auto-restart, furnaces, moulding barrels, precision deep standby</p>
+</div>
+</div>
+<p style="position:absolute;left:72px;top:36px;font-size:24px;font-weight:700;color:#2F4F8F;background:#EEF2F8;border:3px dashed #2F4F8F;border-radius:40px;padding:6px 22px">MODELLED</p>
+<p style="position:absolute;right:56px;top:36px;width:80px;text-align:right;font-size:32px;font-weight:700;color:#1F3FBF">8</p>
+<div style="position:absolute;left:112px;bottom:128px;width:1696px;padding:26px 40px;background:#EEF2F8;border:3px dashed #2F4F8F;border-radius:16px"><p style="font-size:34px;font-weight:700;font-style:italic;color:#1F3A68;text-align:center">Operator present means hands off: presence is a veto on every shutdown.</p></div>
+<div style="position:absolute;left:0;bottom:44px;width:1500px;height:14px;background:#8DB3D6"></div>
+<div style="position:absolute;left:0;bottom:0;width:1440px;height:44px;background:#1F4E8C"></div>
+<img src="/_blob/8e4e05449653644aebae929bd7ae1991" alt="SSN logo" style="position:absolute;right:56px;bottom:16px;width:220px;height:90px;object-fit:contain">
+<aside>Powers are assumptions for a vertical machining centre, swept in the sensitivity study. Leaving deep standby is charged a 10-minute warm-up at 4 kW in the model, because precision machines need thermal stability (thermal effects cause up to 75 % of geometric errors, Fraunhofer IPK). That is why precision machines are advisory only.</aside>
+</section>
