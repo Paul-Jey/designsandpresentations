@@ -1,0 +1,113 @@
+# 6 Simulation Results and Discussion
+
+## 6.1 OVERVIEW OF THE STUDIES
+
+All results in this chapter are MODELLED, using model v2 as described in Chapter 5. Nine studies were run. Studies S1 to S4 look at a single reference day in detail: one machine, the whole shop, the split between load types, and the shape of the load curve. Study S5 repeats the day 1,000 times with different random events to test how robust the saving is. Studies S6 and S7 examine the sensitivity of the result to the main assumptions and to the choice of standby timer. Study S8 looks at payback, and S9 compares the factory with the office case of Review 3.
+
+## 6.2 S1: ONE MACHINE OVER ONE SHIFT
+
+<<fig:s1>> shows the first shift of machine M1, a general-purpose machine under automatic control, on the reference day. The top panel shows when the machine was cutting, the middle panel shows operator presence, both true and as seen by the filtered camera signal, and the bottom panel shows the power drawn with and without the node.
+
+@fig s1
+
+For most of the shift the two power curves lie on top of each other. The machine alternates between cutting at 7.5 kW and short idle gaps at 3.0 kW while the operator loads the next part, and the node correctly leaves these gaps alone because the operator is present. The curves separate only during the tea breaks at about 08:00 and 12:00, the meal break at about 10:00, a short absence before 09:30 and the end-of-shift changeover. In each case the operator leaves, the filtered presence drops after a minute, and three minutes later the machine drops to its 1.2 kW standby. When the operator returns, the machine goes back to idle and then to cutting.
+
+Over this shift, the energy of M1 fell from {s1_b} kWh to {s1_c} kWh, a reduction of {s1_pct} %. This is a modest figure, and it is meant to be. A busy machine with a present operator offers little to save during the shift, and the system is designed not to interfere with it. The large savings come from the longer unattended periods, as the following studies show.
+
+## 6.3 S2: WHOLE SHOP CUMULATIVE ENERGY
+
+<<fig:s2>> shows the cumulative energy of the whole shop over the reference day, including all ten machines and the shared loads. The two curves stay close during productive hours and pull apart during breaks, at the end of each shift, and overnight, where machines that were left on in the baseline drop to deep standby under control.
+
+@fig s2
+
+On the reference day, the shop used {ref_Eb} kWh in the baseline and {ref_Ec} kWh with the edge node, a saving of {ref_pct} %. This is a single sample. As Section 6.6 shows, the average over many days is somewhat lower, and it is the average that we use as the headline result.
+
+## 6.4 S3: SAVINGS BY LOAD TYPE
+
+<<fig:s3>> breaks the energy of the reference day down by load type. Machines dominate the bill, using a little over half of the shop's energy, followed by the compressor, the fans and the lighting.
+
+@fig s3
+
+The pattern of savings is different from the pattern of use. Averaged over 1,000 simulated days, the daily saving is {sv_cnc} kWh from the machines, {sv_light} kWh from lighting, {sv_fan} kWh from the fans, {sv_comp} kWh from the compressor and {sv_conv} kWh from the conveyor, as listed in <<tab:byload>>. Machines give the largest absolute saving. Lighting and fans give the largest percentage saving on their own consumption, because whole zones are often empty during breaks and on the aisle side of the shop. The compressor saving is small because it can be stopped only when the entire shop is idle.
+
+@tab byload
+
+This result directly answers the second point raised by the expert panel. The same camera signal that controls machine standby also drives lighting, ventilation, the conveyor and the compressor, and together these shared loads account for more than half of the total saving.
+
+## 6.5 S4: LOAD-DURATION CURVE, LOAD FACTOR AND MAXIMUM DEMAND
+
+<<fig:s4>> shows the load-duration curve of the shop for the reference day, with the power values sorted from highest to lowest. The electrical indices are summarised in <<tab:indices>>.
+
+@fig s4
+
+@tab indices
+
+The upper part of the curve, which covers the hours when most machines are cutting, is almost unchanged. The difference lies in the middle and lower part: the controlled curve falls away earlier and settles at a much lower level overnight. Average power falls from {avg_b} kW to {avg_c} kW, while the peak stays at {peak_b} kW. As a result, the load factor falls from {lf_b} to {lf_c}.
+
+The maximum demand barely moves, from {md_b} kVA to {md_c} kVA on the reference day and from {mc_md_b} to {mc_md_c} kVA on average. This is expected. The highest 15-minute demand occurs when most machines are cutting at the same time, which is exactly when the node does nothing. We therefore claim an energy saving, not a demand saving, and the demand charge component of the saving in the next section is correspondingly small. A lower load factor is not a problem in itself here; it simply reflects lower consumption with the same connected load. Reducing the peak would need a different feature, such as staggering machine restarts after lunch, which we list as future work.
+
+## 6.6 S5: MONTE-CARLO ROBUSTNESS
+
+A single day can be lucky or unlucky. To see how much the saving depends on the particular events of one day, the simulation was repeated for 1,000 days, each with its own random material waits, tool changes, breakdowns, operator absences, occlusions and overnight decisions. <<fig:s5>> shows the distribution of the daily saving.
+
+@fig s5
+
+The mean saving is {mean_pct} %, with a median of {p50} %, and 90 % of days fall between {p5} % and {p95} %. The saving was positive on {pos_days} % of the simulated days. The reference day, at {ref_pct} %, lies in the upper part of the distribution, which is why we use the Monte-Carlo mean rather than the reference day for the headline figures in <<tab:headline>>.
+
+@tab headline
+
+Over a year of {days_yr} working days, the mean saving corresponds to {kwh_yr} kWh, which at the TNERC HT-I tariff is worth Rs {rs_energy} in energy charges and Rs {rs_demand} in demand charges, a total of Rs {rs_total} per year. The avoided emissions are {co2} tonnes of CO2 per year. The idle-energy ratio of the shop falls from {ier_b} % to {ier_c} %.
+
+The percentage saving is lower than the 18.8 % found for the office in Review 3. This is not a weakness of the factory case. A machining shop is busy for most of the shift, so the fraction of time available for saving is smaller, but the loads are so much larger that the absolute saving, about {save_day} kWh per day, is nearly fifty times that of the office room.
+
+## 6.7 S6: SENSITIVITY ANALYSIS
+
+Several inputs to the model are assumptions. To see which of them matter, each was varied on its own between a low and a high value while the others were held at their reference values, using 150 simulated days for each case. The results are shown as a tornado chart in <<fig:s6>> and in <<tab:sens>>.
+
+@fig s6
+
+@tab sens
+
+The idle-to-cutting power ratio of the machines matters most. If idle power is only 25 % of cutting power, the annual saving falls to Rs {s6_idle_lo}; at 55 % it rises to Rs {s6_idle_hi}. The frequency of idle events comes next: halving the material waits, breakdowns and machines left on overnight reduces the saving to Rs {s6_ev_lo}, and increasing them by half raises it to Rs {s6_ev_hi}. The tariff simply scales the result. The number of shifts also matters. A three-shift shop saves more, Rs {s6_sh3}, because it has three sets of breaks and changeovers and its lights, fans and compressor run around the clock. A single-shift shop saves less, Rs {s6_sh1}, even though the machines left on overnight stand idle for longer, because only a minority of machines are left on and the shared loads run for only eight hours.
+
+The practical conclusion is that the two inputs with the largest influence are both properties of the real shop, the idle power of its machines and how often they stand idle, and both can be measured cheaply with CT clamps before any control is installed. That measurement should be the first step of any deployment.
+
+## 6.8 S7: TIMER STUDY
+
+The standby timer T1 is the main design parameter of the system. A short timer saves more energy but risks putting a machine to sleep just before the operator returns. A long timer avoids this but misses many short idle periods. To quantify this trade-off, T1 was varied from 1 to 30 min. Two kinds of unwanted event were counted. A nuisance standby is one in which the operator or the machine becomes active again within five minutes of the standby starting. A false standby is one that starts while the operator is actually present but hidden from the camera. The results are plotted in <<fig:s7>> and listed in <<tab:timer>>.
+
+@fig s7
+
+@tab timer
+
+The saving falls steadily as T1 grows, from {t1_1_s} % at 1 min to {t1_30_s} % at 30 min. The nuisance rate, however, does not fall steadily. It is low at 2 to 3 min, rises to a peak of {t1_10_n} events per machine-shift at 10 min, and then drops sharply above 15 min. The reason is the tea break. With T1 at 10 min, a machine goes to standby ten minutes into a fifteen-minute break, and the operator returns a few minutes later, so almost every tea break produces a nuisance event. With T1 at 3 min, the same break produces a standby that lasts twelve minutes, which saves energy and is not a nuisance.
+
+False standbys are rare at every setting except the shortest. At T1 = 1 min, an operator hidden behind a machine guard for a minute or two can be taken as absent, giving {t1_1_f} false standbys per machine-shift. At 3 min this falls to {t1_3_f}.
+
+On this basis we chose T1 = 3 min. Compared with the 5 min we started with, it gives a higher saving ({t1_3_s} % against {t1_5_s} %) and about half the nuisance events ({t1_3_n} against {t1_5_n} per machine-shift). The study also suggests a simple improvement: since breaks happen at known times, the node could send a planned pause command at the start of each scheduled break, rather than waiting for the timer at all.
+
+## 6.9 S8: PAYBACK PER NODE
+
+The cost of a node depends on how many machines it serves, since each machine needs a CT clamp but the Jetson, power supply and input and output module are shared. <<fig:s8>> shows the simple payback against the number of machines covered by one node, using the average saving per machine of Rs {rs_per_machine} per year and subtracting the cost of the node's own electricity.
+
+@fig s8
+
+With existing CCTV cameras, a node serving a single machine pays back in {pb_1} months, one serving four machines in {pb_4} months, and one serving ten machines in {pb_10} months. These figures cover only the node and its sensors. A complete installation for the reference shop, including dimming interfaces for the lighting zones, contactors for the fans, the conveyor interlock, a compressor isolation valve and the cost of wiring and commissioning, comes to Rs {cost_full}, and pays back in {pb_full} months. If new IP cameras have to be installed, the cost rises to Rs {cost_new} and the payback to {pb_new} months.
+
+The node's own electricity, {node_kwh} kWh per year, is only {node_share} % of the energy it saves. The prices used are indicative retail prices and are listed in Chapter 7.
+
+## 6.10 S9: GENERALITY, OFFICE AND FACTORY
+
+<<fig:s9>> places the two applications side by side. In the office room of Review 3, occupancy control reduced energy from {off_b} to {off_c} kWh per day, a saving of {off_pct} %, or {off_kwh} kWh per year. In the machining shop, the saving is {mean_pct} %, but in absolute terms it is about {save_day} kWh per day.
+
+@fig s9
+
+Recomputing the office economics with the same method as the factory exposed one correction to Review 3. The payback of 22.5 months reported there used the gross saving. Subtracting the electricity used by the node itself, which is 12.5 W running all day, reduces the annual saving from Rs {off_gross} to Rs {off_net}, and the payback becomes {off_pb_n} months. The difference is small, but the corrected value is the one that should be quoted.
+
+## 6.11 DISCUSSION
+
+The results support three conclusions. First, the edge node can reduce the energy of a small machining shop by a meaningful amount, about {mean_pct} % on average, without interfering with productive work, because it acts only when a machine is both idle and unattended. Second, a substantial part of the saving comes from loads other than the machines themselves, which justifies treating the camera as a sensor for the whole shop rather than for one machine at a time. Third, the saving is an energy saving, not a demand saving.
+
+The result compares reasonably with the literature, given the differences in setting. Building studies with occupancy control report savings between about 6 % for whole buildings (Lin et al. 2023) and 17 to 24 % for HVAC alone (Kong et al. 2022). Our factory figure is at the lower end in percentage terms, which is consistent with a busy workplace, but large in absolute terms.
+
+The limitations should be stated plainly. The state powers of the machines, the frequency of idle events, the shared load ratings and the hardware prices are assumptions, not measurements. The sensitivity study shows which of them matter most. The camera error model is based on our office experience and on published industrial detection rates, not on measurements in a factory. And the reference shop is a single, stylised example; a forging unit, a fabrication shop or a plastics plant would behave differently. Each of these limitations points to a specific measurement, and those measurements form the next stage of the work.

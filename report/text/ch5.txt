@@ -1,0 +1,81 @@
+# 5 Electrical Energy Modelling
+
+## 5.1 APPROACH
+
+Since the factory part of the system has not been installed on a real shop floor, its effect is estimated with a simulation model, called model v2 to distinguish it from the office model of Review 3. The model generates the activity of every machine and operator in a reference shop over a full day, runs the same decision logic that the edge node would run, and computes the electrical power of every load at every time step, both with and without the node. Comparing the two gives the energy saving, the change in maximum demand and the change in cost.
+
+The model is written in Python and uses a time step of 10 s, which is short compared with any event that matters for energy, such as a tea break or a material wait. All input values are kept in a single assumptions file, listed in Appendix 1, and a fixed random seed makes every result reproducible. Every number quoted in Chapter 6 is produced by this code and written to a results file; none is typed in by hand.
+
+## 5.2 MACHINE POWER MODEL
+
+Each machine k is in one of the states defined in Chapter 3 at each time step, and its power is taken from that state:
+
+@eq mpower
+
+The values used for a vertical machining centre are listed in <<tab:power>>. There is no published measurement of state powers for a typical Indian MSME machine, so these are engineering assumptions chosen to be consistent with the literature: a mean cutting power of 7.5 kW sits comfortably below the 13 kW reported for roughing on a larger machining centre (Heidenhain 2011), and an idle power of 40 % of the cutting power reflects the large fixed share described in Chapter 2. Because these values matter, the idle power ratio is varied from 25 % to 55 % in the sensitivity study.
+
+@tab power
+
+## 5.3 SHARED LOADS
+
+The power drawn by the whole shop is the sum of the machine powers and the shared loads:
+
+@eq shop
+
+The compressor is modelled as a 22 kW screw compressor with load and unload control. Its load fraction f depends on the air demand of the machines that are cutting plus a constant leak demand, and in the unloaded state it still draws a fraction of its full power:
+
+@eq comp
+
+Here P_full is the full-load power, alpha_u the unloaded power fraction (0.30), lambda_leak the leak demand as a fraction of capacity (0.25, within the 20 to 30 % range reported by the US DOE), beta the air demand per cutting machine (0.06 of capacity) and N_proc the number of machines cutting. The conveyor is a 2.2 kW drive. Each of the four zones has 3.6 kW of LED high-bay lighting, equivalent to twenty-four 150 W fittings, and one 3.7 kW extraction or ventilation fan.
+
+## 5.4 OPERATIONS MODEL OF THE REFERENCE SHOP
+
+The value of the edge node depends entirely on how often machines stand idle and whether anyone is with them. To capture this, every machine shift is generated as a random sequence of events, summarised in <<tab:ops>>. Machining cycles have random lengths with a mean of 12 min, separated by two-minute loading gaps during which the operator is present. On top of this, each shift contains a set-up period at the start, two tea breaks, a lunch break and a changeover at the end, as well as random material waits, tool changes, breakdowns and short absences of the operator. In the baseline, 30 % of machines are left switched on overnight, which reflects a common situation in small shops where the last shift does not always power down every machine.
+
+@tab ops
+
+The camera itself is also modelled imperfectly. In any frame, a present operator is missed with a probability of 10 %, the same assumption used in Phase I, and a false detection appears with a probability of 0.2 %. In addition, each operator is fully hidden from the camera twice per shift on average, for a random period with a mean of 90 s. These occlusion periods are what can cause a false standby, and they are an important input to the timer study in Chapter 6.
+
+## 5.5 BASELINE AND CONTROLLED OPERATION
+
+The baseline represents the shop as it runs today. Machines are switched on for the whole shift and draw idle power whenever they are not cutting. Lights, fans, the conveyor and the compressor run for the whole of both shifts. Machines left on overnight idle until the next morning.
+
+In controlled operation, the same random events are replayed, but the decision logic of Chapter 3 is applied using the filtered camera signal and the current signal. Using the same events for both cases means the difference between them is due only to the control, not to a different day.
+
+## 5.6 ENERGY, DEMAND AND COST
+
+Energy is obtained by summing power over the time steps, and the saving is the difference between baseline and controlled energy:
+
+@eq energy
+
+@eq saved
+
+Industrial meters record maximum demand as the highest average apparent power over a demand interval, taken as 15 min. With n time steps in each interval b and a plant power factor PF, the maximum demand in kVA is
+
+@eq md
+
+The monthly bill under the TNERC two-part tariff is then
+
+@eq bill
+
+where c_E is the energy charge, c_D the demand charge and CD the contract demand. The tariff and emission inputs are listed in <<tab:tariff>>. The contract demand of 130 kVA is an assumption that places the baseline maximum demand close to the contract value, which is typical of a shop that has sized its connection to its load.
+
+@tab tariff
+
+## 5.7 PERFORMANCE INDICATORS
+
+Three further indicators are reported. The load factor compares average and peak power:
+
+@eq lf
+
+The idle-energy ratio is the share of the total shop energy that is used by machines while they are not cutting. It is a simple energy performance indicator in the sense of ISO 50006, and it is the quantity that the edge node is designed to reduce:
+
+@eq ier
+
+Finally, the avoided emissions follow from the grid emission factor published by the Central Electricity Authority, 0.710 kg CO2 per kWh for 2024-25 (CEA 2025b):
+
+@eq co2
+
+## 5.8 MODEL CHECKS
+
+Before using the model, we checked it in three ways. First, with the standby timers set longer than a day and advisory compliance set to zero, the controlled machine energy equals the baseline machine energy to within rounding, which confirms that the two cases are computed on exactly the same events. Second, the office case of Review 3 was recomputed from its state durations and gives the same 17.0 and 13.8 kWh per day as before. Third, the time series of individual machines were inspected by eye, as in <<fig:s1>> in Chapter 6, to confirm that standby occurs only when the machine is idle and the filtered presence signal is absent.

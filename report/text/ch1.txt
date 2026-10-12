@@ -1,0 +1,53 @@
+# 1 Introduction
+
+## 1.1 GENERAL
+
+Walk through any small machining unit in an industrial estate around Chennai during the lunch break and you will hear it before you see it. The operators have gone to the canteen, but most of the machines are still humming. Coolant pumps circulate oil that nobody is using, chip conveyors crawl along with nothing on them, the hydraulic power packs hold pressure, and the high-bay lights over the bays stay on. The same thing happens, in smaller doses, many times in every shift: while an operator walks to the stores for raw material, while a crane is awaited, while a setter checks a drawing, or while a breakdown waits for the maintenance fitter.
+
+None of this energy goes into making a part. It is the cost of keeping a machine ready. In a large plant with an energy cell, some of it is managed by habit and by maintenance checklists. In a micro, small or medium enterprise (MSME), it is usually nobody's job.
+
+This project started with a narrower question. In the first three reviews we built an edge computing node that watches a camera feed, counts people, and turns that count into a stable occupancy signal for building energy management. We applied it to an office room and modelled the effect on air conditioning and lighting. At Review 3 the industry experts on the panel accepted the work but pushed it in a new direction. Factories, they said, use far more electricity than offices, and idle machines waste a large share of it. They also asked us to use the camera intelligence for more than air conditioning. This report is our response to that feedback. It keeps the hardware we built, extends the decision layer to a machining shop, and quantifies the result in electrical terms.
+
+## 1.2 ENERGY USE IN INDIAN MANUFACTURING
+
+Industry is the largest consumer of electricity in India. Data from the Central Electricity Authority show that industrial consumers accounted for about 42 % of total electricity consumption in 2023-24, well ahead of the domestic sector at about 24 % (CEA 2025a). A large part of this demand sits in MSME clusters. According to TERI, roughly 200 energy-intensive MSME clusters account for about a quarter of the country's energy use, with an estimated saving potential of around 15 %.
+
+The large energy-intensive plants are covered by the Perform, Achieve and Trade (PAT) scheme of the Bureau of Energy Efficiency, which has delivered verified savings; the first cycle alone saved 8.67 Mtoe against a target of 6.69 Mtoe. Most machining MSMEs, however, are far too small to be designated consumers under PAT. They buy power on high-tension (HT) or low-tension industrial tariffs, they rarely have sub-metering, and the person who pays the electricity bill is often the owner, who has no way of knowing which machine consumed what.
+
+The tariff structure matters for this work. In Tamil Nadu, the HT-I industrial tariff that applies from July 2025 has two parts: an energy charge of Rs 7.50 per kWh and a demand charge of Rs 608 per kVA per month, billed on the higher of the recorded maximum demand and 90 % of the contract demand (TNERC 2025). A saving in kWh therefore reduces the bill directly, while a saving in demand reduces it only if it lowers the monthly peak.
+
+@tab context
+
+## 1.3 IDLE ENERGY IN MACHINE SHOPS
+
+A computer numerical control (CNC) machine is not a single load. Besides the spindle and feed drives that actually remove metal, it carries a set of auxiliary units: coolant pumps and chillers, a hydraulic unit, lubrication, a chip conveyor, cabinet cooling fans, the control system and lighting. Many of these run at near constant power whenever the machine is switched on, regardless of whether it is cutting.
+
+This is why the energy that actually goes into cutting is often a small share of the total. A widely cited survey of an automotive machining line found that only 14.8 % of the input energy was used for the machining itself, with the remaining 85.2 % going to auxiliary and constant loads (Gutowski et al. 2005). Later reviews report that idle, standby and auxiliary states can take up to 80 % of the energy of a machine tool, depending on how busy the machine is. The lower the utilisation, the larger the share of energy that is spent simply waiting.
+
+Machines are only part of the picture. Compressed air typically uses about 10 % of the electricity in an industrial facility, and much more at some sites (US DOE 2003). Lighting, extraction fans and conveyors in a shop are usually switched on at the start of the shift and switched off at the end, whether or not anyone is in the bay.
+
+## 1.4 NEED FOR THE STUDY
+
+Switching idle machines to standby is not a new idea. Several scheduling studies have shown that turning off under-used machines during long idle periods saves a significant amount of energy (Mouzon et al. 2007), and machine builders now ship standby modes. The difficulty on a real shop floor is deciding when to use them. A timer that sends a machine to standby after a fixed time without a part cannot tell the difference between an operator who has walked away for twenty minutes and an operator who is standing at the machine measuring a component. The first case is waste. The second is normal work, and interrupting it annoys the operator, who will then simply disable the feature.
+
+Most Indian factories already have CCTV cameras on the shop floor for security. If the video from those cameras can be turned into a reliable signal of whether an operator is at a machine, the standby decision can be made with context, and the same signal can also drive lights, fans, conveyors and the compressor. Because the processing happens on a small edge computer next to the camera, no video has to leave the premises, which addresses the privacy concern that workers and unions rightly raise about camera analytics.
+
+What was missing in our earlier work, and in the literature we reviewed, was a quantified answer to three questions. How much energy would such a system actually save in a typical Indian machining shop? Would it reduce the electricity bill, including the demand charge? And can it be done safely, without stopping machines that should not be stopped?
+
+## 1.5 OBJECTIVES OF THE STUDY
+
+The objectives of the project, and their status at the time of writing, are listed in <<tab:objectives>>. We use three status labels throughout the report. IMPLEMENTED means built and running on our hardware. MODELLED means evaluated by simulation with stated assumptions. FUTURE means designed but not yet built.
+
+@tab objectives
+
+## 1.6 SCOPE AND LIMITATIONS
+
+The reference case for the study is a small machining shop with ten CNC vertical machining centres, a compressor, a conveyor line, high-bay lighting and extraction fans, working two shifts a day. The office room studied in Review 3 is retained as a second application to show that the same edge layer works in both settings.
+
+Thermal processes such as furnaces, heat treatment and injection moulding barrels are outside the automatic control scope. They may receive advisory alerts, but the system never switches them. The edge node may request standby; it never starts a machine.
+
+The person detector, filter and dashboard run on real hardware. The machine-level control and all energy and cost figures in this report are modelled. We have not measured savings on a working shop floor, and the report does not claim measured savings anywhere.
+
+## 1.7 ORGANISATION OF THE REPORT
+
+Chapter 2 reviews the literature on machine tool energy states, switch-off policies, vision-based occupancy sensing and current-based machine monitoring, and identifies the research gap. Chapter 3 presents the system architecture, the machine state machine and the rules for shared loads. Chapter 4 describes the edge node as built. Chapter 5 develops the electrical model of the reference shop, including the tariff and demand calculation. Chapter 6 presents and discusses the simulation results. Chapter 7 covers the economics, the relevant standards and a deployment roadmap. Chapter 8 concludes the report and outlines future work.

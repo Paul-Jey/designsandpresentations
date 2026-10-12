@@ -1,0 +1,30 @@
+# 8 Conclusion and Future Work
+
+## 8.1 CONCLUSIONS
+
+This project set out to turn an ordinary surveillance camera into a source of energy intelligence. In Phase I we built an edge node on an NVIDIA Jetson Nano that detects people in real time with a TensorRT-optimised ResNet10 detector, converts the detections into a stable occupancy signal with a temporal filter, and shows the result on a live dashboard, with no video leaving the device. That node is implemented and working.
+
+Following the feedback of the industry experts at Review 3, we extended the decision layer from an office room to a machining shop. The extension combines operator presence from the camera with machine activity from a current clamp, so that a machine is put into standby only when it is both idle and unattended. A four-state machine with a short standby timer and a longer deep standby timer handles the machines, and a set of zone rules handles lighting, fans, the conveyor and the compressor. Precision machines are kept in advisory mode, and the node never starts any load.
+
+For a reference shop with ten CNC machines working two shifts, the simulation gives a mean energy saving of {mean_pct} %, with 90 % of days between {p5} % and {p95} %. This corresponds to {kwh_yr} kWh, Rs {rs_lakh} lakh and {co2} tonnes of CO2 per year. The complete installation, including the interfaces to the shared loads, pays back in about {pb_full} months. More than half of the saving comes from loads other than the machines, which confirms that the camera is most useful as a sensor for the whole shop. The maximum demand is almost unchanged, so the benefit is an energy saving rather than a demand saving.
+
+The timer study produced a result we did not expect at the start. The nuisance rate of the standby timer is worst when the timer is a little shorter than a standard tea break, and a shorter timer of three minutes is better on both energy and nuisance than the five minutes we first proposed. Finally, recomputing the office case with the same method corrected its payback from 22.5 to {off_pb_n} months once the node's own electricity is included.
+
+The objectives set in Chapter 1 have been met at the level stated for each: the edge node is implemented, the factory extension is designed and modelled, and the integration and measurement path is defined.
+
+## 8.2 CONTRIBUTION TO SUSTAINABLE DEVELOPMENT GOALS
+
+The work relates to four of the United Nations Sustainable Development Goals, as summarised in <<tab:sdg>>.
+
+@tab sdg
+
+## 8.3 FUTURE WORK
+
+The next steps follow directly from the limitations identified in Chapter 6.
+
+- Measure the idle power of real machines and the frequency of idle periods in a working MSME, using CT clamps in advisory mode, and recalibrate the model.
+- Build and run the bench demonstration with a current sensor and a relay, and measure the detection accuracy, frame rate, delay and power consumption of the node.
+- Retrain or fine-tune the detector on factory images, with helmets, coveralls and partial occlusion by machine guards.
+- Add a demand-limiting function that staggers machine restarts after common breaks, so that the system can also reduce the maximum demand charge.
+- Use known break times to send planned pause commands, through PROFIenergy where available, instead of relying only on the standby timer.
+- Integrate with plant systems through MQTT, Modbus and OPC UA, and verify the savings under ISO 50015.

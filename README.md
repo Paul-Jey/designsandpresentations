@@ -8,8 +8,7 @@
 | `04_SYSTEM_DESIGN.md` | Machine state machine, multi-load rules, ADVISORY/AUTO, KPIs, status labels | 2 |
 | `sim_v2/` | Model v2: `assumptions.yaml`, `model.py`, `run_all.py` (S1–S9), `make_summary.py`, `figures/`, `results.json`, `results_summary.md` | 3 |
 | `05_DEMO_PLAN.md` | Bench demo: parts, cost, code to write, 90 s script | 4 |
-| `Final_Report_Draft.docx` | SSN-format technical draft (Annexure I-A cover), built by `report/build_report.py` | 5 |
-| `report_outline.md` | Page budget and what the team still writes | 5 |
+| `Final_Report.docx` | Finished report, SSN format (Annexure I-A cover), 64 pages Chapter 1 to References. Prose in `report/text/`, built by `report/build_report.py` | 5 |
 | `deck_source/` | Source of the 15-slide viva deck (Claude Slides artifact) | 6 |
 
 ## Rebuild everything

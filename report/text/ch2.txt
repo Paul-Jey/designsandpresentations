@@ -1,0 +1,61 @@
+# 2 Literature Review and Research Gap
+
+## 2.1 INTRODUCTION
+
+The problem sits at the meeting point of three bodies of work that rarely cite each other. Production engineers have studied how much energy machine tools use in different operating states and when it pays to switch them off. Building researchers have shown that cameras and deep learning can detect occupants and save HVAC energy. Signal processing researchers have shown that current measurements can reveal what a machine is doing without opening its controller. This chapter reviews each strand in turn, then looks at the other idle loads in a factory and at the standards that govern control and verification. It closes with the gap that this project addresses.
+
+## 2.2 ENERGY CONSUMPTION OF MACHINE TOOLS
+
+Gutowski, Dahmus and Thiriez (2006) collected the specific electrical energy requirements of a wide range of manufacturing processes and showed that the energy per unit of material processed is not constant, as many life cycle tools assume. It falls steeply as the process rate rises, because a large part of the power drawn is needed just to keep the equipment running. In an earlier survey of production systems in Japan, Europe and the United States, Gutowski et al. (2005) reported that in an automotive machining line only 14.8 % of the energy reached the actual machining process.
+
+Kara and Li (2011) turned this observation into an empirical model. They expressed the specific energy consumption of turning and milling as a constant plus a term inversely proportional to the material removal rate. The second term represents the fixed power of the machine spread over its output. When the material removal rate drops to zero, as it does whenever the machine is waiting, the whole fixed power becomes waste.
+
+Li, Zein, Kara and Herrmann (2011) looked specifically at this fixed energy consumption, which keeps the machine in a ready state. They pointed out that the behaviour of machine tools in standby had not been studied in depth and evaluated improvement strategies on six machines covering different processes. The keynote paper by Denkena et al. (2020) in the CIRP Annals later surveyed machine-side and process-side measures for metal-cutting machine tools, from efficient drives and hydraulics to operating strategies, and named retrofitting of existing machines as an open research question.
+
+Some idea of the magnitudes comes from industry. In a worked example published by Heidenhain (2011), a machining centre milling an aluminium housing drew a mean total power of about 13 kW during roughing, of which about 5.1 kW was needed only for conditioning and pumping the cooling lubricant. Mori et al. (2011) at DMG Mori showed that changing cutting conditions and synchronising spindle acceleration with the feed axes can reduce the energy per part. These are machine-side measures. They make a running machine more efficient but do nothing about a machine that is switched on and not running.
+
+## 2.3 SWITCHING IDLE MACHINES TO STANDBY
+
+Mouzon, Yildirim and Twomey (2007) were among the first to treat idle energy as a scheduling problem. They showed that a significant amount of energy can be saved when non-bottleneck machines, which are under-used by definition, are turned off during idle periods that are long enough. They also pointed out the catch: switching a machine off and on again costs energy and time, so a short idle period is better left alone. The break-even idle time depends on the machine.
+
+Squeo, Frigerio and Matta (2019) refined this idea for CNC machining centres. Instead of switching the whole machine off, their policy moves individual components through several sleeping states as the idle time grows, using time thresholds. On a five-axis machining centre this gave significantly better savings than single-state policies. The structure of their policy, with a short threshold for a light standby and a longer one for a deeper state, is close to what we adopt in Chapter 3.
+
+All of these policies decide on the basis of time since the last part. They assume that a machine with no part is idle. They have no way of knowing whether an operator is setting up the next job, inspecting a part, or has left the area.
+
+## 2.4 THERMAL AND PROCESS CONSTRAINTS
+
+The main argument against aggressive switch-off is thermal stability. Spindles, ball screws and machine structures expand as they warm up, and a precision machine is usually run for a warm-up period before accurate work begins. Fraunhofer IPK reports that up to 75 % of the geometric errors of machine tools can be traced to thermally induced displacement. Experiments reported at euspen have shown that putting the spindle cooling unit into standby during non-machining periods saves energy but also shifts spindle temperature and displacement, so the saving has to be weighed against accuracy.
+
+For the design of an automatic system, this means that not every machine should be treated alike. A general-purpose machine making roughing cuts can tolerate a deeper standby. A precision machine may only tolerate a light standby with thermal control still running, and should be left to a human decision. Process equipment such as furnaces or injection moulding barrels should not be switched by an external system at all.
+
+## 2.5 VISION-BASED OCCUPANCY SENSING
+
+The building energy literature provides strong evidence that cameras can sense occupants reliably. Tien et al. (2021) trained a Faster R-CNN model to detect both occupancy and equipment use from a camera in an office. They reported an overall accuracy of 97.32 % for occupancy and 80.80 % for equipment use, and estimated through building simulation that the internal gains assumed in a schedule-based model were substantially higher than the detected ones. Choi et al. (2022) developed deep vision-based occupancy counting and used the counts for ventilation control, and Zhang et al. (2024) compared deep learning models for occupancy detection in buildings with high occupancy, showing a trade-off between accuracy and processing speed.
+
+The energy effect of occupancy-based control has been measured in the field. Kong et al. (2022) ran a side-by-side experiment and reported weekly HVAC energy savings of 17 to 24 % with more than 80 % occupant satisfaction. Lin et al. (2023) evaluated an occupancy-based HVAC control system in an office building and, using a calibrated model, projected an annual whole-building saving of 6.1 %. Occupancy-based lighting control has an even longer record. A meta-analysis of 240 savings estimates from 88 studies found average savings of about 24 % for occupancy sensors (Williams et al. 2012).
+
+The factory floor is harder than an office. Operators work close to machines and are often partly hidden by guards, fixtures or the machine itself. Work on indoor worker localisation in industrial settings has reported that a deep learning detector found a walking operator in only about two thirds of the frames. A practical system therefore needs temporal filtering and, ideally, a second sensor.
+
+## 2.6 CURRENT-BASED MACHINE MONITORING
+
+Non-intrusive load monitoring (NILM) infers the state of individual loads from current and voltage measurements. Gebbe (2019) applied it to machines in manufacturing and estimated the energy demand of individual loads from aggregate measurements with an accuracy of 85 % or better for most loads in two case studies. Suzuki, Kohmoto and Ogatsu (2017) monitored several manufacturing machines with a single current sensor using a factorial hidden Markov model, and noted that household NILM models do not transfer directly because industrial machines behave in more complex ways. Deep learning has also been used to recognise operating states of machine tools such as starting, standby and cutting from power data.
+
+For our purposes, a current transformer (CT) clamp on each machine feeder is enough. It tells us reliably whether the machine is cutting, because spindle current rises sharply under load, but it cannot tell us whether a person is present. That is exactly the information the camera provides.
+
+## 2.7 OTHER IDLE LOADS IN A FACTORY
+
+Compressed air deserves special mention. The US Department of Energy sourcebook on compressed air systems estimates that compressed air generation takes about 10 % of the electricity in a typical industrial facility and 30 % or more at some sites, and that system improvements can save 20 to 50 % of that electricity (US DOE 2003). Leaks are a large part of the waste: a poorly maintained plant may lose 20 to 30 % of compressor output to leaks, and these leaks continue whenever the system is pressurised, including breaks and idle periods.
+
+Lighting, extraction fans and conveyors are simple on and off loads. Their savings depend almost entirely on how often the area they serve is empty. We found no peer-reviewed figures for idle conveyor or fan energy in Indian machine shops, so these loads are modelled with stated assumptions in Chapter 5.
+
+## 2.8 STANDARDS AND CONTROL PATHS
+
+Several standards define how a system like ours would connect to real equipment and how its savings would be verified. ISO 14955-1 (2017) gives a design methodology for energy-efficient machine tools and describes their energy-using functions. PROFIenergy, a profile of PROFINET maintained by PROFIBUS and PROFINET International, lets a controller send standard pause commands so that devices enter predefined low-power modes during planned and unplanned breaks. OPC UA and Modbus TCP give vendor-neutral access to machine data and to meters, relays and drives, while MQTT 5.0 (OASIS 2019) is a lightweight publish and subscribe protocol for telemetry. On the management side, ISO 50001 (2018) defines an energy management system, ISO 50006 (2014) explains how to set baselines and energy performance indicators, and ISO 50015 (2014) covers measurement and verification of savings. These are discussed again in Chapter 7.
+
+## 2.9 RESEARCH GAP
+
+<<tab:gap>> summarises the main strands of related work. Switch-off policies for machine tools decide on time alone and do not know whether anyone is at the machine. Vision-based occupancy systems know where people are but have been applied almost entirely to buildings. Current-based monitoring knows what a machine is doing but not who is around it, and stops at monitoring rather than control.
+
+@tab gap
+
+We did not find any reported system that combines camera-based operator presence with current-based machine state on an edge device and uses the result to decide standby for machines and switching for shared loads, with an explicit safety whitelist. This project addresses that gap. Because the work is still at the modelling stage for the factory, our contribution is a complete design and a quantified estimate of its electrical effect, built on top of a working edge node.
