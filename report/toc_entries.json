@@ -1,0 +1,633 @@
+{
+"toc": [
+[
+"front",
+"",
+"ABSTRACT",
+"front:ABSTRACT"
+],
+[
+"front",
+"",
+"LIST OF TABLES",
+"front:LIST OF TABLES"
+],
+[
+"front",
+"",
+"LIST OF FIGURES",
+"front:LIST OF FIGURES"
+],
+[
+"front",
+"",
+"LIST OF SYMBOLS AND ABBREVIATIONS",
+"front:LIST OF SYMBOLS AND ABBREVIATIONS"
+],
+[
+"chap",
+"1",
+"INTRODUCTION",
+"chap:1"
+],
+[
+"sec",
+"",
+"1.1 GENERAL",
+"head:1.1 GENERAL"
+],
+[
+"sec",
+"",
+"1.2 ENERGY USE IN INDIAN MANUFACTURING",
+"head:1.2 ENERGY USE IN INDIAN MANUFACTURING"
+],
+[
+"sec",
+"",
+"1.3 IDLE ENERGY IN MACHINE SHOPS",
+"head:1.3 IDLE ENERGY IN MACHINE SHOPS"
+],
+[
+"sec",
+"",
+"1.4 NEED FOR THE STUDY",
+"head:1.4 NEED FOR THE STUDY"
+],
+[
+"sec",
+"",
+"1.5 OBJECTIVES OF THE STUDY",
+"head:1.5 OBJECTIVES OF THE STUDY"
+],
+[
+"sec",
+"",
+"1.6 SCOPE AND LIMITATIONS",
+"head:1.6 SCOPE AND LIMITATIONS"
+],
+[
+"sec",
+"",
+"1.7 ORGANISATION OF THE REPORT",
+"head:1.7 ORGANISATION OF THE REPORT"
+],
+[
+"chap",
+"2",
+"LITERATURE REVIEW AND RESEARCH GAP",
+"chap:2"
+],
+[
+"sec",
+"",
+"2.1 INTRODUCTION",
+"head:2.1 INTRODUCTION"
+],
+[
+"sec",
+"",
+"2.2 ENERGY CONSUMPTION OF MACHINE TOOLS",
+"head:2.2 ENERGY CONSUMPTION OF MACHINE TOOLS"
+],
+[
+"sec",
+"",
+"2.3 SWITCHING IDLE MACHINES TO STANDBY",
+"head:2.3 SWITCHING IDLE MACHINES TO STANDBY"
+],
+[
+"sec",
+"",
+"2.4 THERMAL AND PROCESS CONSTRAINTS",
+"head:2.4 THERMAL AND PROCESS CONSTRAINTS"
+],
+[
+"sec",
+"",
+"2.5 VISION-BASED OCCUPANCY SENSING",
+"head:2.5 VISION-BASED OCCUPANCY SENSING"
+],
+[
+"sec",
+"",
+"2.6 CURRENT-BASED MACHINE MONITORING",
+"head:2.6 CURRENT-BASED MACHINE MONITORING"
+],
+[
+"sec",
+"",
+"2.7 OTHER IDLE LOADS IN A FACTORY",
+"head:2.7 OTHER IDLE LOADS IN A FACTORY"
+],
+[
+"sec",
+"",
+"2.8 STANDARDS AND CONTROL PATHS",
+"head:2.8 STANDARDS AND CONTROL PATHS"
+],
+[
+"sec",
+"",
+"2.9 RESEARCH GAP",
+"head:2.9 RESEARCH GAP"
+],
+[
+"chap",
+"3",
+"SYSTEM ARCHITECTURE",
+"chap:3"
+],
+[
+"sec",
+"",
+"3.1 OVERVIEW",
+"head:3.1 OVERVIEW"
+],
+[
+"sec",
+"",
+"3.2 DESIGN PRINCIPLES",
+"head:3.2 DESIGN PRINCIPLES"
+],
+[
+"sec",
+"",
+"3.3 SENSING INPUTS",
+"head:3.3 SENSING INPUTS"
+],
+[
+"sec",
+"",
+"3.4 ZONES AND REGIONS OF INTEREST",
+"head:3.4 ZONES AND REGIONS OF INTEREST"
+],
+[
+"sec",
+"",
+"3.5 SIGNAL CONDITIONING",
+"head:3.5 SIGNAL CONDITIONING"
+],
+[
+"sec",
+"",
+"3.6 MACHINE STATE MACHINE",
+"head:3.6 MACHINE STATE MACHINE"
+],
+[
+"sec",
+"",
+"3.7 MULTI-LOAD ACTIONS",
+"head:3.7 MULTI-LOAD ACTIONS"
+],
+[
+"sec",
+"",
+"3.8 ADVISORY AND AUTOMATIC MODES",
+"head:3.8 ADVISORY AND AUTOMATIC MODES"
+],
+[
+"sec",
+"",
+"3.9 SAFETY CONSIDERATIONS",
+"head:3.9 SAFETY CONSIDERATIONS"
+],
+[
+"sec",
+"",
+"3.10 PRIVACY AND WORKER ACCEPTANCE",
+"head:3.10 PRIVACY AND WORKER ACCEPTANCE"
+],
+[
+"chap",
+"4",
+"IMPLEMENTATION OF THE EDGE NODE",
+"chap:4"
+],
+[
+"sec",
+"",
+"4.1 HARDWARE",
+"head:4.1 HARDWARE"
+],
+[
+"sec",
+"",
+"4.2 SOFTWARE STACK",
+"head:4.2 SOFTWARE STACK"
+],
+[
+"sec",
+"",
+"4.3 PIPELINE",
+"head:4.3 PIPELINE"
+],
+[
+"sec",
+"",
+"4.4 LIVE DETECTION AND DASHBOARD",
+"head:4.4 LIVE DETECTION AND DASHBOARD"
+],
+[
+"sec",
+"",
+"4.5 EXTENSION FOR THE SHOP FLOOR",
+"head:4.5 EXTENSION FOR THE SHOP FLOOR"
+],
+[
+"sec",
+"",
+"4.6 PERFORMANCE CONSIDERATIONS",
+"head:4.6 PERFORMANCE CONSIDERATIONS"
+],
+[
+"chap",
+"5",
+"ELECTRICAL ENERGY MODELLING",
+"chap:5"
+],
+[
+"sec",
+"",
+"5.1 APPROACH",
+"head:5.1 APPROACH"
+],
+[
+"sec",
+"",
+"5.2 MACHINE POWER MODEL",
+"head:5.2 MACHINE POWER MODEL"
+],
+[
+"sec",
+"",
+"5.3 SHARED LOADS",
+"head:5.3 SHARED LOADS"
+],
+[
+"sec",
+"",
+"5.4 OPERATIONS MODEL OF THE REFERENCE SHOP",
+"head:5.4 OPERATIONS MODEL OF THE REFERENCE SHOP"
+],
+[
+"sec",
+"",
+"5.5 BASELINE AND CONTROLLED OPERATION",
+"head:5.5 BASELINE AND CONTROLLED OPERATION"
+],
+[
+"sec",
+"",
+"5.6 ENERGY, DEMAND AND COST",
+"head:5.6 ENERGY, DEMAND AND COST"
+],
+[
+"sec",
+"",
+"5.7 PERFORMANCE INDICATORS",
+"head:5.7 PERFORMANCE INDICATORS"
+],
+[
+"sec",
+"",
+"5.8 MODEL CHECKS",
+"head:5.8 MODEL CHECKS"
+],
+[
+"chap",
+"6",
+"SIMULATION RESULTS AND DISCUSSION",
+"chap:6"
+],
+[
+"sec",
+"",
+"6.1 OVERVIEW OF THE STUDIES",
+"head:6.1 OVERVIEW OF THE STUDIES"
+],
+[
+"sec",
+"",
+"6.2 S1: ONE MACHINE OVER ONE SHIFT",
+"head:6.2 S1: ONE MACHINE OVER ONE SHIFT"
+],
+[
+"sec",
+"",
+"6.3 S2: WHOLE SHOP CUMULATIVE ENERGY",
+"head:6.3 S2: WHOLE SHOP CUMULATIVE ENERGY"
+],
+[
+"sec",
+"",
+"6.4 S3: SAVINGS BY LOAD TYPE",
+"head:6.4 S3: SAVINGS BY LOAD TYPE"
+],
+[
+"sec",
+"",
+"6.5 S4: LOAD-DURATION CURVE, LOAD FACTOR AND MAXIMUM DEMAND",
+"head:6.5 S4: LOAD-DURATION CURVE, LOAD FACTOR AND MAXIMUM DEMAND"
+],
+[
+"sec",
+"",
+"6.6 S5: MONTE-CARLO ROBUSTNESS",
+"head:6.6 S5: MONTE-CARLO ROBUSTNESS"
+],
+[
+"sec",
+"",
+"6.7 S6: SENSITIVITY ANALYSIS",
+"head:6.7 S6: SENSITIVITY ANALYSIS"
+],
+[
+"sec",
+"",
+"6.8 S7: TIMER STUDY",
+"head:6.8 S7: TIMER STUDY"
+],
+[
+"sec",
+"",
+"6.9 S8: PAYBACK PER NODE",
+"head:6.9 S8: PAYBACK PER NODE"
+],
+[
+"sec",
+"",
+"6.10 S9: GENERALITY, OFFICE AND FACTORY",
+"head:6.10 S9: GENERALITY, OFFICE AND FACTORY"
+],
+[
+"sec",
+"",
+"6.11 DISCUSSION",
+"head:6.11 DISCUSSION"
+],
+[
+"chap",
+"7",
+"ECONOMICS, STANDARDS AND DEPLOYMENT ROADMAP",
+"chap:7"
+],
+[
+"sec",
+"",
+"7.1 COST OF A DEPLOYMENT",
+"head:7.1 COST OF A DEPLOYMENT"
+],
+[
+"sec",
+"",
+"7.2 STANDARDS AND CONTROL PATHS",
+"head:7.2 STANDARDS AND CONTROL PATHS"
+],
+[
+"sec",
+"",
+"7.3 MEASUREMENT AND VERIFICATION PLAN",
+"head:7.3 MEASUREMENT AND VERIFICATION PLAN"
+],
+[
+"sec",
+"",
+"7.4 DEPLOYMENT ROADMAP",
+"head:7.4 DEPLOYMENT ROADMAP"
+],
+[
+"sec",
+"",
+"7.5 BENCH DEMONSTRATION",
+"head:7.5 BENCH DEMONSTRATION"
+],
+[
+"chap",
+"8",
+"CONCLUSION AND FUTURE WORK",
+"chap:8"
+],
+[
+"sec",
+"",
+"8.1 CONCLUSIONS",
+"head:8.1 CONCLUSIONS"
+],
+[
+"sec",
+"",
+"8.2 CONTRIBUTION TO SUSTAINABLE DEVELOPMENT GOALS",
+"head:8.2 CONTRIBUTION TO SUSTAINABLE DEVELOPMENT GOALS"
+],
+[
+"sec",
+"",
+"8.3 FUTURE WORK",
+"head:8.3 FUTURE WORK"
+],
+[
+"chap",
+"",
+"APPENDIX 1 MODEL ASSUMPTIONS",
+"head:APPENDIX 1  MODEL ASSUMPTIONS"
+],
+[
+"chap",
+"",
+"APPENDIX 2 EDGE NODE PROBE AND FILTER",
+"head:APPENDIX 2  EDGE NODE PROBE AND FILTER"
+],
+[
+"chap",
+"",
+"APPENDIX 3 BENCH DEMONSTRATION",
+"head:APPENDIX 3  BENCH DEMONSTRATION"
+],
+[
+"chap",
+"",
+"REFERENCES",
+"head:REFERENCES"
+]
+],
+"tab": [
+[
+"1.1",
+"Key figures for the Indian manufacturing context",
+"tab:Table 1.1 Key figures for the Indian manufacturing context"
+],
+[
+"1.2",
+"Objectives of the project and their status",
+"tab:Table 1.2 Objectives of the project and their status"
+],
+[
+"2.1",
+"Summary of related work",
+"tab:Table 2.1 Summary of related work"
+],
+[
+"3.1",
+"Sensing inputs for machine k and zone j",
+"tab:Table 3.1 Sensing inputs for machine k and zone j"
+],
+[
+"3.2",
+"Machine states, conditions, power and action",
+"tab:Table 3.2 Machine states, conditions, power and action"
+],
+[
+"3.3",
+"Control rules for shared loads",
+"tab:Table 3.3 Control rules for shared loads"
+],
+[
+"4.1",
+"Edge node hardware",
+"tab:Table 4.1 Edge node hardware"
+],
+[
+"4.2",
+"DeepStream pipeline elements",
+"tab:Table 4.2 DeepStream pipeline elements"
+],
+[
+"5.1",
+"Power assumptions for model v2",
+"tab:Table 5.1 Power assumptions for model v2"
+],
+[
+"5.2",
+"Events in each machine shift",
+"tab:Table 5.2 Events in each machine shift"
+],
+[
+"5.3",
+"Tariff and emission inputs",
+"tab:Table 5.3 Tariff and emission inputs"
+],
+[
+"6.1",
+"Mean daily saving by load type over 1,000 days",
+"tab:Table 6.1 Mean daily saving by load type over 1,000 days"
+],
+[
+"6.2",
+"Electrical indices on the reference day",
+"tab:Table 6.2 Electrical indices on the reference day"
+],
+[
+"6.3",
+"Headline results over 1,000 simulated days",
+"tab:Table 6.3 Headline results over 1,000 simulated days"
+],
+[
+"6.4",
+"Sensitivity of the annual saving (150 days per case)",
+"tab:Table 6.4 Sensitivity of the annual saving (150 days per case)"
+],
+[
+"6.5",
+"Effect of the standby timer T1 (150 days per value)",
+"tab:Table 6.5 Effect of the standby timer T1 (150 days per value)"
+],
+[
+"7.1",
+"Indicative cost of the installation for the reference shop",
+"tab:Table 7.1 Indicative cost of the installation for the reference shop"
+],
+[
+"7.2",
+"Standards and protocols relevant to deployment",
+"tab:Table 7.2 Standards and protocols relevant to deployment"
+],
+[
+"8.1",
+"Mapping to Sustainable Development Goals",
+"tab:Table 8.1 Mapping to Sustainable Development Goals"
+],
+[
+"A3.1",
+"Parts for the bench demonstration",
+"tab:Table A3.1 Parts for the bench demonstration"
+]
+],
+"fig": [
+[
+"3.1",
+"System architecture with implementation status",
+"fig:Figure 3.1 System architecture with implementation status"
+],
+[
+"3.2",
+"Reference machining shop with zones, machine regions of interest and cameras",
+"fig:Figure 3.2 Reference machining shop with zones, machine regions of interest and cameras"
+],
+[
+"3.3",
+"Machine state machine with transition conditions",
+"fig:Figure 3.3 Machine state machine with transition conditions"
+],
+[
+"4.1",
+"Prototype bench set-up with the Jetson Nano edge node",
+"fig:Figure 4.1 Prototype bench set-up with the Jetson Nano edge node"
+],
+[
+"4.2",
+"Live person detection on the Jetson Nano",
+"fig:Figure 4.2 Live person detection on the Jetson Nano"
+],
+[
+"4.3",
+"Live energy dashboard in the office configuration",
+"fig:Figure 4.3 Live energy dashboard in the office configuration"
+],
+[
+"6.1",
+"Activity, operator presence and power of machine M1 over the first shift",
+"fig:Figure 6.1 Activity, operator presence and power of machine M1 over the first shift"
+],
+[
+"6.2",
+"Cumulative energy of the shop on the reference day",
+"fig:Figure 6.2 Cumulative energy of the shop on the reference day"
+],
+[
+"6.3",
+"Energy by load type on the reference day, baseline and controlled",
+"fig:Figure 6.3 Energy by load type on the reference day, baseline and controlled"
+],
+[
+"6.4",
+"Load-duration curve of the shop on the reference day",
+"fig:Figure 6.4 Load-duration curve of the shop on the reference day"
+],
+[
+"6.5",
+"Distribution of the daily energy saving over 1,000 simulated days",
+"fig:Figure 6.5 Distribution of the daily energy saving over 1,000 simulated days"
+],
+[
+"6.6",
+"One-at-a-time sensitivity of the annual saving",
+"fig:Figure 6.6 One-at-a-time sensitivity of the annual saving"
+],
+[
+"6.7",
+"Effect of the standby timer T1 on saving and on nuisance and false standbys",
+"fig:Figure 6.7 Effect of the standby timer T1 on saving and on nuisance and false standbys"
+],
+[
+"6.8",
+"Simple payback against the number of machines covered by one node",
+"fig:Figure 6.8 Simple payback against the number of machines covered by one node"
+],
+[
+"6.9",
+"Saving of the same edge layer in an office room and in a machining shop",
+"fig:Figure 6.9 Saving of the same edge layer in an office room and in a machining shop"
+]
+]
+}

@@ -307,7 +307,7 @@ add_style("Table Text", 11, align=WD_ALIGN_PARAGRAPH.LEFT, spacing=1.0).paragrap
 add_style("Code", 8, align=WD_ALIGN_PARAGRAPH.LEFT, spacing=1.0).paragraph_format.space_after = Pt(0)
 st["Code"].font.name = "Courier New"
 bl = add_style("Bullet", 13)
-bl.paragraph_format.left_indent = Cm(1.0); bl.paragraph_format.first_line_indent = Cm(-0.5)
+bl.paragraph_format.left_indent = Cm(1.6); bl.paragraph_format.first_line_indent = Cm(-0.6)
 body = add_style("Body", 13)
 body.paragraph_format.first_line_indent = Cm(1.0)
 
@@ -446,9 +446,23 @@ def table(key):
             t.columns[i].width = Cm(w)
             for row in t.rows:
                 row.cells[i].width = Cm(w)
+    keep_table_together(t)
     if note:
         para(note, "Table Text", italic=True, size=10)
     doc.add_paragraph(style="Table Text")
+
+
+
+def keep_table_together(t):
+    """Keep a table on one page: rows never split and each row stays with the next."""
+    n = len(t.rows)
+    for ri, row in enumerate(t.rows):
+        trPr = row._tr.get_or_add_trPr()
+        cs = OxmlElement("w:cantSplit"); trPr.append(cs)
+        if ri < n - 1:
+            for c in row.cells:
+                for p in c.paragraphs:
+                    p.paragraph_format.keep_with_next = True
 
 
 def equation(key):
@@ -490,7 +504,7 @@ def render(path):
         elif line.startswith("@eq "):
             flush(); equation(line.split()[1])
         elif line.startswith("- "):
-            flush(); para("•\t" + resolve(line[2:]), "Bullet").paragraph_format.tab_stops.add_tab_stop(Cm(1.0))
+            flush(); para("•\t" + resolve(line[2:]), "Bullet").paragraph_format.tab_stops.add_tab_stop(Cm(1.6))
         else:
             buf.append(line)
     flush()
@@ -502,7 +516,8 @@ prepass(CHAPTERS)
 # ================================================================== TITLE PAGE (Annexure I-A)
 sec = doc.sections[0]
 set_margins(sec)
-page_numbering(sec, "lowerRoman", start=1, show=False)
+page_numbering(sec, "lowerRoman", start=1, show=True)
+sec.different_first_page_header_footer = True
 
 
 def tp(text, size, bold=True, italic=False, after=6, spacing=1.15):
@@ -585,16 +600,89 @@ for block in (TXT / "ack.txt").read_text().strip().split("\n\n"):
 for n_, _ in TEAM:
     para(n_, "Normal", bold=True, align=WD_ALIGN_PARAGRAPH.RIGHT, after=0, spacing=1.0)
 
-# ================================================================== TOC / LOT / LOF
+# ================================================================== TOC / LOT / LOF (static tables, Annexure III layout)
+PAGEMAP_FILE = HERE / "pagemap.json"
+PAGEMAP = json.load(open(PAGEMAP_FILE)) if PAGEMAP_FILE.exists() else {}
+APPENDICES = ["APPENDIX 1  MODEL ASSUMPTIONS", "APPENDIX 2  EDGE NODE PROBE AND FILTER", "APPENDIX 3  BENCH DEMONSTRATION"]
+FRONT = ["ABSTRACT", "LIST OF TABLES", "LIST OF FIGURES", "LIST OF SYMBOLS AND ABBREVIATIONS"]
+
+
+def toc_entries():
+    """(kind, chapter_no, title, search_key) in document order."""
+    out = [("front", "", h, "front:" + h) for h in FRONT]
+    for n, path in CHAPTERS:
+        for line in path.read_text().splitlines():
+            if line.startswith("# "):
+                title = line[2:].split(" ", 1)[1].upper()
+                out.append(("chap", str(n), title, f"chap:{n}"))
+            elif line.startswith("## "):
+                out.append(("sec", "", line[3:], "head:" + line[3:]))
+    for a in APPENDICES:
+        out.append(("chap", "", a.replace("  ", " "), "head:" + a))
+    out.append(("chap", "", "REFERENCES", "head:REFERENCES"))
+    return out
+
+
+def caption_entries(kind):
+    reg = FIGS if kind == "fig" else TABS
+    rows = []
+    for k, num in NUM.items():
+        kk, key = k.split(":")
+        if kk == kind:
+            cap = reg[key][1] if kind == "fig" else reg[key][0]
+            label = ("Figure " if kind == "fig" else "Table ") + num
+            rows.append((num, cap, f"{kind}:{label} {cap}"))
+    if kind == "tab":
+        rows.append(("A3.1", "Parts for the bench demonstration", "tab:Table A3.1 Parts for the bench demonstration"))
+    return rows
+
+
+def static_table(header, rows, widths, bold_rows=()):
+    t = doc.add_table(rows=1, cols=len(header))
+    t.style = "Table Grid"; t.alignment = WD_TABLE_ALIGNMENT.CENTER; t.autofit = False
+    for i, h in enumerate(header):
+        c = t.rows[0].cells[i]; c.text = ""
+        c.paragraphs[0].style = st["Table Text"]
+        c.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+        r = c.paragraphs[0].add_run(h); r.bold = True; r.font.size = Pt(12)
+    for ri, row in enumerate(rows):
+        cells = t.add_row().cells
+        for i, v in enumerate(row):
+            cells[i].text = ""
+            p = cells[i].paragraphs[0]; p.style = st["Table Text"]
+            p.paragraph_format.space_before = Pt(2); p.paragraph_format.space_after = Pt(2)
+            if i != 1:
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            r = p.add_run(v); r.font.size = Pt(12); r.bold = ri in bold_rows
+    for i, w in enumerate(widths):
+        t.columns[i].width = Cm(w)
+        for row in t.rows:
+            row.cells[i].width = Cm(w)
+    return t
+
+
 page_break()
 para("TABLE OF CONTENTS", "Front Heading")
-field(doc.add_paragraph(), 'TOC \\o "1-3" \\h \\z \\u')
+rows, bold = [], []
+for kind, chap, title, key in toc_entries():
+    pg = PAGEMAP.get(key, "")
+    if kind == "sec":
+        num, rest = title.split(" ", 1)
+        rows.append(["", f"      {num}   {rest}", pg])
+    else:
+        bold.append(len(rows)); rows.append([chap, title, pg])
+static_table(["CHAPTER NO.", "TITLE", "PAGE NO."], rows, [2.8, 8.7, 2.0], bold)
+
 page_break()
 para("LIST OF TABLES", "Front Heading")
-field(_pb(doc.add_paragraph()), 'TOC \\h \\z \\t "Table Caption,1"')
+static_table(["TABLE NO.", "TITLE", "PAGE NO."],
+             [[n, cap, PAGEMAP.get(k, "")] for n, cap, k in caption_entries("tab")], [2.4, 9.1, 2.0])
 page_break()
 para("LIST OF FIGURES", "Front Heading")
-field(_pb(doc.add_paragraph()), 'TOC \\h \\z \\t "Figure Caption,1"')
+static_table(["FIGURE NO.", "TITLE", "PAGE NO."],
+             [[n, cap, PAGEMAP.get(k, "")] for n, cap, k in caption_entries("fig")], [2.4, 9.1, 2.0])
+json.dump({"toc": toc_entries(), "tab": caption_entries("tab"), "fig": caption_entries("fig")},
+          open(HERE / "toc_entries.json", "w"), indent=0)
 
 # ================================================================== SYMBOLS AND ABBREVIATIONS
 page_break()
@@ -615,16 +703,15 @@ ABB = [("BEE", "Bureau of Energy Efficiency"), ("CEA", "Central Electricity Auth
        ("OPC UA", "Open Platform Communications Unified Architecture"), ("PAT", "Perform, Achieve and Trade"),
        ("PyDS", "Python bindings for DeepStream"), ("ROI", "Region of Interest"),
        ("TNERC", "Tamil Nadu Electricity Regulatory Commission"), ("VMC", "Vertical Machining Centre")]
-t = doc.add_table(rows=0, cols=2); t.style = "Table Grid"; t.autofit = False
-for a_, b_ in SYM + ABB:
-    cells = t.add_row().cells
-    for c, v, w in zip(cells, (a_, b_), (3.5, 10.0)):
-        c.text = ""; c.width = Cm(w); c.paragraphs[0].style = st["Table Text"]; c.paragraphs[0].add_run(v)
+static_table(["SYMBOL", "DESCRIPTION"], [[a_, b_] for a_, b_ in SYM], [3.5, 10.0])
+para("", "Table Text")
+static_table(["ABBREVIATION", "EXPANSION"], [[a_, b_] for a_, b_ in ABB], [3.5, 10.0])
 
 # ================================================================== CHAPTERS
 sec2 = doc.add_section(WD_SECTION.NEW_PAGE)
 set_margins(sec2)
 page_numbering(sec2, "decimal", start=1, show=True)
+sec2.different_first_page_header_footer = False
 for _, path in CHAPTERS:
     render(path)
 
@@ -656,6 +743,7 @@ for row in [("Jetson Nano and C920 camera (existing)", "1", "0"), ("12 V DC fan 
     cells = tA.add_row().cells
     for c, v in zip(cells, row):
         c.text = ""; c.paragraphs[0].style = st["Table Text"]; rr = c.paragraphs[0].add_run(v); rr.bold = row[0] == "Total"
+keep_table_together(tA)
 for txt in [
     "The software changes are small. The probe counts persons inside a region drawn around the desk, the INA219 is read twice a second over I2C and the fan is taken as running when its current exceeds about 30 % of its running value. The state machine of Chapter 3 runs with the standby timer shortened to 30 s, and a GPIO pin drives the relay. The dashboard gains a machine card with the state, the countdown and live counters of energy and rupees avoided.",
     "The demonstration runs in five steps. With the operator seated and the fan running, the state is PROCESSING; with the fan stopped and the operator present, it is IDLE-ATTENDED and nothing happens. When the operator leaves, the countdown runs, the relay opens and the avoided energy counter starts to rise. The fan restarts only when the returning operator presses the resume button. In advisory mode the same sequence produces only an alert.",
@@ -701,7 +789,6 @@ for i, ref in enumerate(sorted(REFS, key=str.lower), 1):
     p.paragraph_format.left_indent = Cm(0.9); p.paragraph_format.first_line_indent = Cm(-0.9)
     p.paragraph_format.tab_stops.add_tab_stop(Cm(0.9))
 
-update_fields_on_open()
 out = ROOT / "Final_Report.docx"
 doc.save(out)
 
