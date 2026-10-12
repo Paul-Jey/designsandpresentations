@@ -571,7 +571,7 @@ r = p.add_run("Certified further that to the best of my knowledge the work repor
 doc.add_paragraph()
 sig = doc.add_table(rows=7, cols=2)
 L = ["SIGNATURE", "Dr. V. RAJINI", "HEAD OF THE DEPARTMENT", "Professor and Head", DEPT, "SSN College of Engineering", "Kalavakkam - 603 110"]
-Rr = ["SIGNATURE", "Dr. RAJESH PANDA", "SUPERVISOR", "Professor", DEPT, "SSN College of Engineering", "Kalavakkam - 603 110"]
+Rr = ["SIGNATURE", "Dr. RAJESH PANDA", "SUPERVISOR", "Assistant Professor", DEPT, "SSN College of Engineering", "Kalavakkam - 603 110"]
 for i in range(7):
     for j, txt in enumerate((L[i], Rr[i])):
         c = sig.rows[i].cells[j]; c.text = ""
