@@ -97,7 +97,7 @@ FIGS = {
 TABS = {
     "context": ("Key figures for the Indian manufacturing context", ["Quantity", "Value", "Source"], [
         ["Industry share of electricity consumption, 2023-24", "about 42 %", "CEA (2025a)"],
-        ["Share of line energy used for machining (automotive line)", "14.8 %", "Gutowski et al. (2005)"],
+        ["Share of line energy used for machining (automotive line)", "14.8 %", "Gutowski et al (2005)"],
         ["Compressed air share of plant electricity", "about 10 %, over 30 % at some sites", "US DOE (2003)"],
         ["Tamil Nadu HT-I tariff from July 2025", "Rs 7.50/kWh and Rs 608/kVA/month", "TNERC (2025)"],
         ["Grid emission factor, 2024-25", "0.710 kg CO2/kWh", "CEA (2025b)"],
@@ -112,11 +112,11 @@ TABS = {
         ["7", "Define the integration and measurement path", "FUTURE"],
     ], [1.2, 9.3, 3.0], None),
     "gap": ("Summary of related work", ["Work", "Sensing", "Decision", "Limitation for this problem"], [
-        ["Mouzon et al. (2007)", "Schedule and time", "Switch off idle machines", "No knowledge of operator presence"],
-        ["Squeo et al. (2019)", "Time since last part", "Multi-level sleep states", "No knowledge of operator presence"],
-        ["Tien et al. (2021); Choi et al. (2022)", "Camera", "Building HVAC and ventilation", "Applied to buildings only"],
-        ["Kong et al. (2022); Lin et al. (2023)", "Occupancy sensors", "HVAC control", "Applied to buildings only"],
-        ["Gebbe (2019); Suzuki et al. (2017)", "Current (NILM)", "Monitoring only", "No operator context, no control"],
+        ["Mouzon et al (2007)", "Schedule and time", "Switch off idle machines", "No knowledge of operator presence"],
+        ["Squeo et al (2019)", "Time since last part", "Multi-level sleep states", "No knowledge of operator presence"],
+        ["Tien et al (2021); Choi et al (2022)", "Camera", "Building HVAC and ventilation", "Applied to buildings only"],
+        ["Kong et al (2022); Lin et al (2023)", "Occupancy sensors", "HVAC control", "Applied to buildings only"],
+        ["Gebbe (2019); Suzuki et al (2017)", "Current (NILM)", "Monitoring only", "No operator context, no control"],
         ["This work", "Camera regions and machine current on an edge node", "Machine standby and shared loads, advisory or automatic", "Modelled; field validation planned"],
     ], [3.6, 3.4, 3.4, 3.1], None),
     "inputs": ("Sensing inputs for machine k and zone j", ["Signal", "Meaning", "Source", "Status"], [
@@ -297,8 +297,8 @@ def add_style(name, size=13, bold=False, italic=False, align=None, spacing=1.5):
 
 
 add_style("Chapter Label", 14, True, align=WD_ALIGN_PARAGRAPH.CENTER).paragraph_format.space_before = Mm(15)
-add_style("Figure Caption", 12, align=WD_ALIGN_PARAGRAPH.CENTER, spacing=1.0).paragraph_format.space_after = Pt(14)
-tc = add_style("Table Caption", 12, align=WD_ALIGN_PARAGRAPH.LEFT, spacing=1.0)
+add_style("Figure Caption", 12, bold=True, align=WD_ALIGN_PARAGRAPH.CENTER, spacing=1.0).paragraph_format.space_after = Pt(14)
+tc = add_style("Table Caption", 12, bold=True, align=WD_ALIGN_PARAGRAPH.LEFT, spacing=1.0)
 tc.paragraph_format.space_before = Pt(10); tc.paragraph_format.keep_with_next = True
 add_style("Ref", 12, align=WD_ALIGN_PARAGRAPH.LEFT, spacing=1.0).paragraph_format.space_after = Pt(1)
 add_style("Equation", 12, align=WD_ALIGN_PARAGRAPH.LEFT)
@@ -309,7 +309,7 @@ st["Code"].font.name = "Courier New"
 bl = add_style("Bullet", 13)
 bl.paragraph_format.left_indent = Cm(1.6); bl.paragraph_format.first_line_indent = Cm(-0.6)
 body = add_style("Body", 13)
-body.paragraph_format.first_line_indent = Cm(1.0)
+body.paragraph_format.first_line_indent = Cm(2.0)
 
 PB = {"next": False}
 
@@ -420,12 +420,12 @@ def figure(key):
     p.paragraph_format.keep_with_next = True
     p.paragraph_format.space_before = Pt(6)
     p.add_run().add_picture(str(path), width=Cm(w))
-    para(f"Figure {NUM['fig:' + key]} {cap}", "Figure Caption")
+    para(f"Figure {NUM['fig:' + key]} {cap}", "Figure Caption", bold=True)
 
 
 def table(key):
     cap, header, rows, widths, note = TABS[key]
-    para(f"Table {NUM['tab:' + key]} {cap}", "Table Caption")
+    para(f"Table {NUM['tab:' + key]} {cap}", "Table Caption", bold=True)
     t = doc.add_table(rows=1, cols=len(header))
     t.style = "Table Grid"; t.alignment = WD_TABLE_ALIGNMENT.CENTER
     for i, h in enumerate(header):
@@ -496,7 +496,10 @@ def render(path):
         elif line.startswith("### "):
             flush(); doc.add_heading(line[4:], level=3)
         elif line.startswith("## "):
-            flush(); doc.add_heading(line[3:], level=2)
+            flush()
+            num, title = line[3:].split(" ", 1)
+            h = doc.add_heading(f"{num}\t{title}", level=2)
+            h.paragraph_format.tab_stops.add_tab_stop(Cm(2.0))
         elif line.startswith("@fig "):
             flush(); figure(line.split()[1])
         elif line.startswith("@tab "):
@@ -520,8 +523,11 @@ page_numbering(sec, "lowerRoman", start=1, show=True)
 sec.different_first_page_header_footer = True
 
 
-def tp(text, size, bold=True, italic=False, after=6, spacing=1.15):
-    return para(text, "Normal", bold=bold, italic=italic, size=size, align=WD_ALIGN_PARAGRAPH.CENTER, after=after, spacing=spacing)
+def tp(text, size, bold=True, italic=False, after=6, spacing=1.15, wide=False):
+    p = para(text, "Normal", bold=bold, italic=italic, size=size, align=WD_ALIGN_PARAGRAPH.CENTER, after=after, spacing=spacing)
+    if wide:
+        p.paragraph_format.left_indent = Mm(-6); p.paragraph_format.right_indent = Mm(-6)
+    return p
 
 
 tp(TITLE, 18, after=18, spacing=1.5)
@@ -534,15 +540,15 @@ for n_, r_ in TEAM:
 tp("", 8, after=6)
 tp("in partial fulfillment for the award of the degree of", 14, bold=True, italic=True, after=12)
 tp("BACHELOR OF ENGINEERING", 16, after=0)
-tp("in", 14, after=0)
-tp("ELECTRICAL AND ELECTRONICS ENGINEERING", 16, after=8)
+tp("IN", 14, after=0)
+tp("ELECTRICAL AND ELECTRONICS ENGINEERING", 16, after=8, wide=True)
 p = doc.add_paragraph(); p.alignment = WD_ALIGN_PARAGRAPH.CENTER
 p.add_run().add_picture(str(AS / "ssn_logo.png"), width=Cm(3.2))
-tp("Department of", 16, after=0)
-tp("Electrical and Electronics Engineering", 16, after=0)
-tp("Sri Sivasubramaniya Nadar College of Engineering", 16, after=0)
-tp("(An Autonomous Institution, Affiliated to Anna University)", 12, after=0)
-tp("Rajiv Gandhi Salai (OMR), Kalavakkam - 603 110", 14, after=12)
+tp("DEPARTMENT OF", 16, after=0)
+tp("ELECTRICAL AND ELECTRONICS ENGINEERING", 16, after=0, wide=True)
+tp("SRI SIVASUBRAMANIYA NADAR", 16, after=0)
+tp("COLLEGE OF ENGINEERING", 16, after=0)
+tp("(An Autonomous Institution, Affiliated to Anna University)", 12, after=18)
 tp("NOVEMBER 2026", 14, after=0)
 
 # ================================================================== BONAFIDE (Annexure II-B)
@@ -598,7 +604,8 @@ para("ACKNOWLEDGEMENT", "Front Heading")
 for block in (TXT / "ack.txt").read_text().strip().split("\n\n"):
     para(block.strip(), "Body", spacing=2.0)
 for n_, _ in TEAM:
-    para(n_, "Normal", bold=True, align=WD_ALIGN_PARAGRAPH.RIGHT, after=0, spacing=1.0)
+    p = para(n_, "Normal", bold=True, align=WD_ALIGN_PARAGRAPH.RIGHT, after=0, spacing=1.0)
+    p.paragraph_format.space_before = Pt(12)
 
 # ================================================================== TOC / LOT / LOF (static tables, Annexure III layout)
 PAGEMAP_FILE = HERE / "pagemap.json"
@@ -633,7 +640,7 @@ def caption_entries(kind):
             label = ("Figure " if kind == "fig" else "Table ") + num
             rows.append((num, cap, f"{kind}:{label} {cap}"))
     if kind == "tab":
-        rows.append(("A3.1", "Parts for the bench demonstration", "tab:Table A3.1 Parts for the bench demonstration"))
+        rows.append(("A 3.1", "Parts for the bench demonstration", "tab:Table A 3.1 Parts for the bench demonstration"))
     return rows
 
 
@@ -650,7 +657,8 @@ def static_table(header, rows, widths, bold_rows=()):
         for i, v in enumerate(row):
             cells[i].text = ""
             p = cells[i].paragraphs[0]; p.style = st["Table Text"]
-            p.paragraph_format.space_before = Pt(2); p.paragraph_format.space_after = Pt(2)
+            p.paragraph_format.space_before = Pt(0); p.paragraph_format.space_after = Pt(0)
+            p.paragraph_format.line_spacing = 1.5
             if i != 1:
                 p.alignment = WD_ALIGN_PARAGRAPH.CENTER
             r = p.add_run(v); r.font.size = Pt(12); r.bold = ri in bold_rows
@@ -727,13 +735,13 @@ for line in (SIM / "assumptions.yaml").read_text().splitlines():
     para(line.split("  #")[0].rstrip() if "#" in line else line, "Code")
 page_break()
 _pb(doc.add_heading("APPENDIX 2  EDGE NODE PROBE AND FILTER", level=1))
-para("The listing below shows the PyDS probe function attached to the DeepStream pipeline, the per-region counting and the asymmetric presence filter of Section 3.5.", "Body")
+para("The listing below shows the PyDS probe function attached to the DeepStream pipeline, the per-region counting and the asymmetric presence filter of Section 3.6.", "Body")
 for line in (TXT / "appendix3_probe.py").read_text().splitlines():
     para(line, "Code")
 page_break()
 _pb(doc.add_heading("APPENDIX 3  BENCH DEMONSTRATION", level=1))
-para("The bench demonstration shows the complete chain from operator absence to switching on the existing edge node, using a small fan as the machine. The parts are listed in Table A3.1.", "Body")
-para("Table A3.1 Parts for the bench demonstration", "Table Caption")
+para("The bench demonstration shows the complete chain from operator absence to switching on the existing edge node, using a small fan as the machine. The parts are listed in Table A 3.1.", "Body")
+para("Table A 3.1 Parts for the bench demonstration", "Table Caption", bold=True)
 tA = doc.add_table(rows=1, cols=3); tA.style = "Table Grid"
 for c, h in zip(tA.rows[0].cells, ("Part", "Quantity", "Approximate cost (Rs)")):
     c.text = ""; c.paragraphs[0].style = st["Table Text"]; c.paragraphs[0].add_run(h).bold = True; shade(c, "D9E2F3")
@@ -744,6 +752,7 @@ for row in [("Jetson Nano and C920 camera (existing)", "1", "0"), ("12 V DC fan 
     for c, v in zip(cells, row):
         c.text = ""; c.paragraphs[0].style = st["Table Text"]; rr = c.paragraphs[0].add_run(v); rr.bold = row[0] == "Total"
 keep_table_together(tA)
+doc.add_paragraph(style="Table Text")
 for txt in [
     "The software changes are small. The probe counts persons inside a region drawn around the desk, the INA219 is read twice a second over I2C and the fan is taken as running when its current exceeds about 30 % of its running value. The state machine of Chapter 3 runs with the standby timer shortened to 30 s, and a GPIO pin drives the relay. The dashboard gains a machine card with the state, the countdown and live counters of energy and rupees avoided.",
     "The demonstration runs in five steps. With the operator seated and the fan running, the state is PROCESSING; with the fan stopped and the operator present, it is IDLE-ATTENDED and nothing happens. When the operator leaves, the countdown runs, the relay opens and the avoided energy counter starts to rise. The fan restarts only when the returning operator presses the resume button. In advisory mode the same sequence produces only an alert.",

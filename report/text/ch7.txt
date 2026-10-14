@@ -1,6 +1,10 @@
 # 7 Economics, Standards and Deployment Roadmap
 
-## 7.1 COST OF A DEPLOYMENT
+## 7.1 INTRODUCTION
+
+Chapter 6 showed how much energy the edge node could save. This chapter looks at what it would cost and how it would be introduced into a working plant. It breaks down the cost of a deployment and the resulting payback, lists the standards and protocols that connect the node to equipment and to an energy management system, and sets out a plan for measuring and verifying the savings. A step-by-step deployment roadmap and the bench demonstration planned for the final review complete the chapter.
+
+## 7.2 COST OF A DEPLOYMENT
 
 The cost of equipping the reference shop is broken down in <<tab:cost>>. The edge computer itself is a small part of the total. Most of the money goes into the interfaces that let the node act on the shared loads, such as dimming interfaces for the lighting zones and contactors for the fans, and into wiring and commissioning. Where the shop already has CCTV cameras covering the machines, no new cameras are needed; if not, one IP camera for every four machines adds about Rs 3,000 each.
 
@@ -12,7 +16,7 @@ The simple payback of the complete installation is
 
 where C_inst is the installed cost, S_yr the annual saving, E_node the annual energy used by the node and c_E the energy charge. For the reference shop this gives {pb_full} months with existing cameras and {pb_new} months with new cameras. Even if the saving turned out to be only half of the modelled value, for example because the machines have a lower idle power than assumed, the payback would still be well under a year. This margin is the main economic argument for the system: the investment is small compared with the electricity bill of even a small machining unit, which in the baseline case is about Rs {bill_lakh} lakh a year in energy charges alone.
 
-## 7.2 STANDARDS AND CONTROL PATHS
+## 7.3 STANDARDS AND CONTROL PATHS
 
 <<tab:std>> lists the standards and protocols that a real deployment would rely on, and the role each would play. They fall into two groups: those that let the node talk to equipment, and those that define how the savings should be managed and proven.
 
@@ -22,7 +26,7 @@ On the equipment side, the simplest path is a relay or a Modbus input and output
 
 On the management side, the node fits naturally into an energy management system under ISO 50001. The idle-energy ratio defined in Chapter 5 is a suitable energy performance indicator in the sense of ISO 50006, because it is easy to measure, easy to explain to a shop owner and directly affected by the control.
 
-## 7.3 MEASUREMENT AND VERIFICATION PLAN
+## 7.4 MEASUREMENT AND VERIFICATION PLAN
 
 The savings in this report are modelled. Before they can be claimed for a real shop, they must be measured. We propose a plan based on Option B of the International Performance Measurement and Verification Protocol (IPMVP), retrofit isolation with measurement of all parameters, which is consistent with ISO 50015.
 
@@ -33,7 +37,7 @@ The savings in this report are modelled. Before they can be claimed for a real s
 
 The baseline period also gives the two inputs that the sensitivity study identified as most important, the real idle power of each machine and the real frequency of idle periods, so the model can be recalibrated before the AUTO period begins.
 
-## 7.4 DEPLOYMENT ROADMAP
+## 7.5 DEPLOYMENT ROADMAP
 
 We see deployment in five steps, each of which reduces risk before the next.
 
@@ -43,6 +47,6 @@ We see deployment in five steps, each of which reduces risk before the next.
 - Step 4, automatic standby for whitelisted machines, with operator feedback collected on nuisance events.
 - Step 5, integration with the plant's systems through MQTT and, where available, PROFIenergy or OPC UA, with verified savings reported under ISO 50015.
 
-## 7.5 BENCH DEMONSTRATION
+## 7.6 BENCH DEMONSTRATION
 
 For the final review, the full chain can be shown on the bench with the existing Jetson. A 12 V fan stands in for the machine, an INA219 sensor measures its current, and a relay switches it. A desk in front of the camera is defined as the operator region. When the operator sits at the desk with the fan running, the state is PROCESSING. When the fan is stopped but the operator stays, the state is IDLE-ATTENDED and nothing happens. When the operator walks away, a timer shortened to 30 s for the demonstration counts down, the relay opens and the dashboard shows the energy and rupees avoided rising. When the operator returns, the fan is restarted only by pressing a resume button, which shows that the node never starts a load on its own. Switching to ADVISORY mode and repeating the sequence shows an alert instead of an action.

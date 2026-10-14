@@ -1,6 +1,6 @@
 # 6 Simulation Results and Discussion
 
-## 6.1 OVERVIEW OF THE STUDIES
+## 6.1 INTRODUCTION
 
 All results in this chapter are MODELLED, using model v2 as described in Chapter 5. Nine studies were run. Studies S1 to S4 look at a single reference day in detail: one machine, the whole shop, the split between load types, and the shape of the load curve. Study S5 repeats the day 1,000 times with different random events to test how robust the saving is. Studies S6 and S7 examine the sensitivity of the result to the main assumptions and to the choice of standby timer. Study S8 looks at payback, and S9 compares the factory with the office case of Review 3.
 
@@ -108,6 +108,6 @@ Recomputing the office economics with the same method as the factory exposed one
 
 The results support three conclusions. First, the edge node can reduce the energy of a small machining shop by a meaningful amount, about {mean_pct} % on average, without interfering with productive work, because it acts only when a machine is both idle and unattended. Second, a substantial part of the saving comes from loads other than the machines themselves, which justifies treating the camera as a sensor for the whole shop rather than for one machine at a time. Third, the saving is an energy saving, not a demand saving.
 
-The result compares reasonably with the literature, given the differences in setting. Building studies with occupancy control report savings between about 6 % for whole buildings (Lin et al. 2023) and 17 to 24 % for HVAC alone (Kong et al. 2022). Our factory figure is at the lower end in percentage terms, which is consistent with a busy workplace, but large in absolute terms.
+The result compares reasonably with the literature, given the differences in setting. Building studies with occupancy control report savings between about 6 % for whole buildings (Lin et al 2023) and 17 to 24 % for HVAC alone (Kong et al 2022). Our factory figure is at the lower end in percentage terms, which is consistent with a busy workplace, but large in absolute terms.
 
 The limitations should be stated plainly. The state powers of the machines, the frequency of idle events, the shared load ratings and the hardware prices are assumptions, not measurements. The sensitivity study shows which of them matter most. The camera error model is based on our office experience and on published industrial detection rates, not on measurements in a factory. And the reference shop is a single, stylised example; a forging unit, a fabrication shop or a plastics plant would behave differently. Each of these limitations points to a specific measurement, and those measurements form the next stage of the work.

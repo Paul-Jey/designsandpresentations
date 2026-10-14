@@ -1,6 +1,10 @@
 # 4 Implementation of the Edge Node
 
-## 4.1 HARDWARE
+## 4.1 INTRODUCTION
+
+This chapter covers the part of the system that has been built and tested, the edge node itself. It lists the hardware, describes the software stack and the DeepStream pipeline that turns camera frames into a filtered person count, and shows the live detection and the dashboard. It then explains the three additions needed to move the node from an office to a shop floor, and discusses the performance limits that matter for this application.
+
+## 4.2 HARDWARE
 
 The edge node was built around an NVIDIA Jetson Nano Developer Kit with 4 GB of memory. The Nano has a quad-core ARM Cortex-A57 processor and a 128-core Maxwell GPU, which is enough to run a small detection network at useful frame rates while drawing only a few watts. For development we used a Logitech C920 USB webcam; in a factory, the same pipeline would take the RTSP stream from an existing CCTV camera instead. The components and their costs are listed in <<tab:hw>>, and the bench set-up is shown in <<fig:bench>>.
 
@@ -10,23 +14,23 @@ The edge node was built around an NVIDIA Jetson Nano Developer Kit with 4 GB of 
 
 The node is powered from a 5 V, 4 A supply through the barrel jack, which allows the Nano to run in its 10 W mode. A heatsink with a fan keeps the module cool during continuous inference. For energy accounting we use a rated budget of 12.5 W for the node, including the camera, which is conservative for this configuration.
 
-## 4.2 SOFTWARE STACK
+## 4.3 SOFTWARE STACK
 
 The software runs on JetPack 4.6 with the NVIDIA DeepStream SDK 6.0.1. DeepStream is built on GStreamer and provides hardware-accelerated plugins for decoding, batching, inference and tracking. We used its Python bindings, PyDS, to read the inference results inside the pipeline. The detector is the ResNet10-based four-class detector supplied with DeepStream as a reference model, of which only the person class is used.
 
 The model is converted into a TensorRT engine with 16-bit floating point (FP16) precision the first time the pipeline runs, and the engine file is cached for later runs. FP16 roughly halves memory traffic compared with 32-bit precision and runs efficiently on the Nano's GPU, with negligible loss of accuracy for this kind of detector.
 
-## 4.3 PIPELINE
+## 4.4 PIPELINE
 
 The pipeline is summarised in <<tab:pipe>>. Frames from the camera are read through V4L2 by the GStreamer source element, converted to the format the GPU expects, and passed to nvstreammux, which forms batches. The nvinfer element runs the TensorRT engine and attaches the detections to each frame as metadata. A probe function attached downstream reads this metadata in Python.
 
 @tab pipe
 
-The probe function walks through the object metadata of each frame and counts the objects of the person class whose confidence exceeds the threshold set in the nvinfer configuration file. The raw count is passed to the temporal filter described in Section 3.5. Once a second, the filtered count, the resulting state and the modelled power are written to a small JSON file, live_state.json, which is read by the dashboard. The core of the probe function and the filter is listed in Appendix 2.
+The probe function walks through the object metadata of each frame and counts the objects of the person class whose confidence exceeds the threshold set in the nvinfer configuration file. The raw count is passed to the temporal filter described in Section 3.6. Once a second, the filtered count, the resulting state and the modelled power are written to a small JSON file, live_state.json, which is read by the dashboard. The core of the probe function and the filter is listed in Appendix 2.
 
 Writing a small file once a second, rather than sending every detection, keeps the interface between the vision code and the rest of the system simple. Any other program, whether a dashboard, an MQTT client or a controller, only needs to read one file with a fixed structure.
 
-## 4.4 LIVE DETECTION AND DASHBOARD
+## 4.5 LIVE DETECTION AND DASHBOARD
 
 <<fig:live>> shows a frame from the live pipeline with the detected person marked, and <<fig:dash>> shows the dashboard. The dashboard displays the current count, the operating state, the set-point and lighting state for the office application, and the modelled power and energy compared with the scheduled baseline, together with the corresponding cost and CO2. The power and energy values on the dashboard are computed from the state using the model in Chapter 5. They are not measured, and the dashboard labels them as modelled.
 
@@ -36,7 +40,7 @@ Writing a small file once a second, rather than sending every detection, keeps t
 
 In the office configuration, the node was able to follow people entering and leaving the room in real time, and the filtered state changed smoothly without the flicker seen in the raw count. This confirmed the behaviour predicted by the filter study in Phase I.
 
-## 4.5 EXTENSION FOR THE SHOP FLOOR
+## 4.6 EXTENSION FOR THE SHOP FLOOR
 
 Moving from the office to the shop floor requires three additions, none of which changes the existing pipeline.
 
@@ -46,7 +50,7 @@ The second is the activity input. For each machine, a split-core CT such as the 
 
 The third is the action output. For loads under automatic control, the node drives a relay module or writes to a Modbus input and output module. Lighting zones are dimmed through their drivers, fans and conveyors through contactors, and the compressor line through an isolation valve and the compressor's own remote stop input. Machines that support PROFIenergy would instead receive a pause command over PROFINET.
 
-## 4.6 PERFORMANCE CONSIDERATIONS
+## 4.7 PERFORMANCE CONSIDERATIONS
 
 The person detector processes each frame independently, so the main performance limits are the frame rate per camera and the end-to-end delay from a person leaving a region to the state changing. Neither is critical for this application. The temporal filter already waits 60 s before accepting an absence, and the standby timer adds three more minutes, so a detection delay of even a second has no practical effect on the energy result. The frame rate only needs to be high enough to catch an operator walking into a region, which a few frames per second will do.
 

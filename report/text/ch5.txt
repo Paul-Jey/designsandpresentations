@@ -1,6 +1,6 @@
 # 5 Electrical Energy Modelling
 
-## 5.1 APPROACH
+## 5.1 INTRODUCTION
 
 Since the factory part of the system has not been installed on a real shop floor, its effect is estimated with a simulation model, called model v2 to distinguish it from the office model of Review 3. The model generates the activity of every machine and operator in a reference shop over a full day, runs the same decision logic that the edge node would run, and computes the electrical power of every load at every time step, both with and without the node. Comparing the two gives the energy saving, the change in maximum demand and the change in cost.
 
