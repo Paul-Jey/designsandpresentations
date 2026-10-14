@@ -605,10 +605,10 @@ for block in (TXT / "abstract.txt").read_text().strip().split("\n\n"):
 page_break()
 para("ACKNOWLEDGEMENT", "Front Heading")
 for block in (TXT / "ack.txt").read_text().strip().split("\n\n"):
-    para(block.strip(), "Body", spacing=2.0)
+    para(block.strip(), "Body", spacing=2.0, after=0)
 for n_, _ in TEAM:
     p = para(n_, "Normal", bold=True, align=WD_ALIGN_PARAGRAPH.RIGHT, after=0, spacing=1.0)
-    p.paragraph_format.space_before = Pt(12)
+    p.paragraph_format.space_before = Pt(36)
 
 # ================================================================== TOC / LOT / LOF (static tables, Annexure III layout)
 PAGEMAP_FILE = HERE / "pagemap.json"
