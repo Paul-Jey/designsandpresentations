@@ -4,7 +4,6 @@
 
 This chapter describes how the edge node and its decision logic fit together. It begins with an overview of the three layers of the system and the principles that guided the design. It then explains the sensing inputs, the zones and regions of interest on the shop floor, and the filtering applied to the raw signals. The machine state machine and the rules for the shared loads follow, together with the advisory and automatic operating modes. The chapter closes with the safety and privacy measures that a factory deployment needs.
 
-## 3.2 SYSTEM OVERVIEW
 
 The system is organised in three layers, shown in <<fig:arch>>. The first layer is the edge node that we built and tested in Phase I: a camera feeds an NVIDIA Jetson Nano, which runs a person detector and produces a filtered person count. The second layer is new. It adds regions of interest around each machine and each floor zone, a current measurement on each machine, a state machine per machine, and a set of rules for the shared loads. This layer is modelled in the present work. The third layer covers the connections to real equipment and to metering, which are planned.
 
@@ -12,7 +11,7 @@ The system is organised in three layers, shown in <<fig:arch>>. The first layer 
 
 The most important design decision is that the hardware already built is kept and extended, not replaced. The person detector does not change when the node moves from an office to a shop floor. What changes is the interpretation of its output: instead of one count for a room, the node reports presence inside several small regions, one per machine, and a count per zone.
 
-## 3.3 DESIGN PRINCIPLES
+## 3.2 DESIGN PRINCIPLES
 
 Four principles guided the design.
 
@@ -21,7 +20,7 @@ Four principles guided the design.
 - Never start anything. The node may request standby or switch off a light, but restarting a machine is always an operator action.
 - Keep video on the device. Only counts, states and power values leave the node.
 
-## 3.4 SENSING INPUTS
+## 3.3 SENSING INPUTS
 
 <<tab:inputs>> lists the signals used for each machine k and each zone j. The camera gives operator presence o_k(t) in the region of interest drawn in front of each machine, and a person count n_j(t) for each floor zone. A CT clamp on the supply to each machine gives the activity signal a_k(t), which is 1 when the measured current exceeds a threshold that separates cutting from idling.
 
@@ -29,7 +28,7 @@ Four principles guided the design.
 
 The two sensors complement each other. On a machining centre with a closed enclosure, the camera cannot see whether the spindle is turning, but the current makes it obvious. On the other hand, the current is the same whether the operator is standing at the machine or has gone for tea. By combining them, the node can separate an idle machine that is attended, which is normal work, from one that is idle and abandoned, which is waste.
 
-## 3.5 ZONES AND REGIONS OF INTEREST
+## 3.4 ZONES AND REGIONS OF INTEREST
 
 <<fig:layout>> shows the layout of the reference shop used in this study. Ten machines are arranged in three zones. Zones 1 and 2 hold six general-purpose machines, and zone 3 holds four precision machines. A fourth zone covers the aisle, stores and inspection area. Each machine has a rectangular region of interest on the floor in front of it, where the operator normally stands. With existing CCTV cameras mounted high on the columns, one camera can cover about four machines.
 
@@ -37,7 +36,7 @@ The two sensors complement each other. On a machining centre with a closed enclo
 
 In DeepStream, these regions are defined as polygons in the configuration of the nvdsanalytics plugin. For each frame, the plugin reports which detected persons have their reference point inside each region, so the probe function receives per-region counts directly.
 
-## 3.6 SIGNAL CONDITIONING
+## 3.5 SIGNAL CONDITIONING
 
 Raw detections flicker. A person who turns sideways or is partly hidden behind a guard can disappear for a few frames, and a reflection can occasionally be detected as a person. In Phase I we showed that a simple asymmetric persistence filter removes almost all of this chatter: on a simulated office day it reduced the number of state changes from 2,633 to 9 and kept the room in the correct state 99.1 % of the time. The same idea is used here, with timings suited to a shop floor:
 
@@ -47,7 +46,7 @@ Raw detections flicker. A person who turns sideways or is partly hidden behind a
 
 Here t_rise is 10 s and t_fall is 60 s. Presence is accepted quickly, so that a returning operator is served at once, but absence is accepted only after a full minute, so that an operator who bends down or steps behind the machine is not treated as gone. For the current signal, a cycle start is accepted at once and a stop only after 30 s, so that the short pauses within a machining cycle, such as tool changes, are not mistaken for idling.
 
-## 3.7 MACHINE STATE MACHINE
+## 3.6 MACHINE STATE MACHINE
 
 Each machine is described by a four-state machine, shown in <<fig:sm>> and summarised in <<tab:states>>. In PROCESSING the machine is cutting. In IDLE-ATTENDED it is not cutting but an operator is present, for example during loading, measuring or a tool change; nothing is done. When the machine is idle and nobody is present, a timer starts. After T1 the machine enters STANDBY, in which the coolant pump, chip conveyor, hydraulic unit and work lamp are switched off while the control and thermal management stay on. If the machine remains unattended beyond T2, and only if it is on the whitelist, it moves to DEEP STANDBY, in which only the control remains powered.
 
@@ -59,7 +58,7 @@ The timer values are not arbitrary. We first used T1 = 5 min, as suggested by th
 
 Leaving DEEP STANDBY is not free. A machine that has cooled down needs a warm-up before precision work. The model charges a warm-up of 10 min at 4 kW every time a machine leaves deep standby, so that the reported saving is net of this penalty.
 
-## 3.8 MULTI-LOAD ACTIONS
+## 3.7 MULTI-LOAD ACTIONS
 
 The second request from the expert panel was to use the camera intelligence for more than HVAC. The zone counts and machine states produced by the node are enough to drive several other loads, using the simple rules in <<tab:loads>>.
 
@@ -67,16 +66,16 @@ The second request from the expert panel was to use the camera intelligence for 
 
 Each rule has a hold time to avoid switching a load on and off repeatedly. High-bay lights are dimmed to 10 % rather than switched off, so that the aisle is never dark. The compressor is stopped only when the whole shop has been idle for five minutes, which in practice means common breaks and the end of the shift; this also removes the leak load during those periods, since a pressurised system leaks whether or not anyone is using air.
 
-## 3.9 ADVISORY AND AUTOMATIC MODES
+## 3.8 ADVISORY AND AUTOMATIC MODES
 
 The node can operate in two modes. In ADVISORY mode, which is the default for any new installation, it does not switch anything. It shows an alert on the supervisor's dashboard, for example that machine 7 has been unattended for six minutes and is costing a stated amount per hour, and leaves the decision to a person. In AUTO mode, the node sends a command through a relay, a Modbus coil, a drive stop input or, on PROFINET machines, a PROFIenergy pause command.
 
 AUTO mode is allowed only for loads on a whitelist. In the reference shop, the six general-purpose machines and all the shared loads are whitelisted. The four precision machines are advisory only, and even when a supervisor acts on an alert, they are sent only to the light standby state and never to deep standby. In the model, we assume that a supervisor acts on 60 % of advisory alerts, after a delay of three minutes.
 
-## 3.10 SAFETY CONSIDERATIONS
+## 3.9 SAFETY CONSIDERATIONS
 
 The node is not part of any safety function of the machine. It only requests transitions into lower power states that the machine builder already provides, and it never requests a start. A standby request is not sent while a cycle is in progress, because the activity signal would show the machine as active. Furnaces, heat treatment equipment, injection moulding barrels and any process where interrupting power would damage the product or create a hazard are excluded from automatic control entirely.
 
-## 3.11 PRIVACY AND WORKER ACCEPTANCE
+## 3.10 PRIVACY AND WORKER ACCEPTANCE
 
 Camera analytics on a shop floor will be read by workers as surveillance unless the design proves otherwise. In our design, video is processed on the Jetson in real time and discarded. Nothing is recorded. The only outputs are counts per region, machine states and power values. The detector finds people, not faces, and no identity is attached to any count. India's Digital Personal Data Protection Act, 2023 allows certain processing for employment purposes but requires that data be limited to its stated purpose; keeping the output to anonymous counts used only for energy control is consistent with this. In a deployment we would also recommend clear signage and discussion with the workers' committee, and a written commitment that the data will not be used to assess individual operators.

@@ -328,7 +328,7 @@ def _pb(p):
 def para(text="", style="Body", bold=False, italic=False, size=None, align=None, after=None, spacing=None):
     p = _pb(doc.add_paragraph(style=style))
     if text:
-        r = p.add_run(text); r.bold, r.italic = bold, italic
+        r = p.add_run(text); r.bold, r.italic = bold or style in ("Chapter Label", "Front Heading"), italic
         if size:
             r.font.size = Pt(size)
     if align is not None:
@@ -574,21 +574,24 @@ p.paragraph_format.line_spacing = 2.0; p.paragraph_format.first_line_indent = Cm
 r = p.add_run("Certified further that to the best of my knowledge the work reported herein does not form part of any "
               "other thesis or dissertation on the basis of which a degree or award was conferred on an earlier "
               "occasion on this or any other candidate."); r.font.size = Pt(14)
-doc.add_paragraph()
+p_gap = doc.add_paragraph(style="Table Text"); p_gap.paragraph_format.space_after = Pt(16)
 sig = doc.add_table(rows=7, cols=2)
 L = ["SIGNATURE", "Dr. V. RAJINI", "HEAD OF THE DEPARTMENT", "Professor and Head", DEPT, "SSN College of Engineering", "Kalavakkam - 603 110"]
 Rr = ["SIGNATURE", "Dr. RAJESH PANDA", "SUPERVISOR", "Assistant Professor", DEPT, "SSN College of Engineering", "Kalavakkam - 603 110"]
 for i in range(7):
     for j, txt in enumerate((L[i], Rr[i])):
         c = sig.rows[i].cells[j]; c.text = ""
-        rr = c.paragraphs[0].add_run(txt); rr.font.size = Pt(11); rr.bold = i in (0, 1, 2)
+        rr = c.paragraphs[0].add_run(txt); rr.font.size = Pt(12); rr.bold = i in (0, 1, 2)
+        c.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
+        c.width = Cm(7.0)
         c.paragraphs[0].paragraph_format.space_after = Pt(0)
         c.paragraphs[0].paragraph_format.line_spacing = 1.0
 para("Submitted for project viva-voce examination held on ...............................", "Normal", size=12)
-ex = doc.add_table(rows=1, cols=2)
-for c, txt in zip(ex.rows[0].cells, ("EXTERNAL EXAMINER", "INTERNAL EXAMINER")):
-    c.text = ""; rr = c.paragraphs[0].add_run(txt); rr.bold = True; rr.font.size = Pt(12)
-    c.paragraphs[0].paragraph_format.space_before = Pt(30)
+p = para("", "Normal", align=WD_ALIGN_PARAGRAPH.LEFT)
+p.paragraph_format.space_before = Pt(18)
+p.paragraph_format.tab_stops.add_tab_stop(Cm(8.0))
+for txt in ("EXTERNAL EXAMINER", "\tINTERNAL EXAMINER"):
+    rr = p.add_run(txt); rr.bold = True; rr.font.size = Pt(12)
 
 # ================================================================== ABSTRACT (TNR 14, double spacing)
 page_break()
@@ -735,7 +738,7 @@ for line in (SIM / "assumptions.yaml").read_text().splitlines():
     para(line.split("  #")[0].rstrip() if "#" in line else line, "Code")
 page_break()
 _pb(doc.add_heading("APPENDIX 2  EDGE NODE PROBE AND FILTER", level=1))
-para("The listing below shows the PyDS probe function attached to the DeepStream pipeline, the per-region counting and the asymmetric presence filter of Section 3.6.", "Body")
+para("The listing below shows the PyDS probe function attached to the DeepStream pipeline, the per-region counting and the asymmetric presence filter of Section 3.5.", "Body")
 for line in (TXT / "appendix3_probe.py").read_text().splitlines():
     para(line, "Code")
 page_break()
@@ -765,33 +768,33 @@ _pb(doc.add_heading("REFERENCES", level=1))
 REFS = [
     "Central Electricity Authority (2025a), 'All India Electricity Statistics: General Review 2025', Ministry of Power, Government of India, New Delhi.",
     "Central Electricity Authority (2025b), 'CO2 Baseline Database for the Indian Power Sector, User Guide Version 21.0', Ministry of Power, Government of India, New Delhi.",
-    "Choi H., Lee J., Yi Y., Na H., Kang K. and Kim T. (2022), 'Deep vision-based occupancy counting: experimental performance evaluation and implementation of ventilation control', Building and Environment, Vol. 223, 109496.",
-    "Denkena B., Abele E., Brecher C., Dittrich M.-A., Kara S. and Mori M. (2020), 'Energy efficient machine tools', CIRP Annals - Manufacturing Technology, Vol. 69, No. 2, doi:10.1016/j.cirp.2020.05.008.",
+    "Choi H., Lee J., Yi Y., Na H., Kang K. and Kim T. (2022), 'Deep vision-based occupancy counting: experimental performance evaluation and implementation of ventilation control', Building and Environment, Vol. 223, Paper No.109496.",
+    "Denkena B., Abele E., Brecher C., Dittrich M.-A., Kara S. and Mori M. (2020), 'Energy efficient machine tools', CIRP Annals - Manufacturing Technology, Vol. 69, No.2, DOI 10.1016/j.cirp.2020.05.008.",
     "Gebbe C. (2019), 'Nonintrusive load monitoring for machines used in manufacturing', arXiv preprint arXiv:1912.01500, Fraunhofer IGCV, Augsburg.",
     "Government of India (2023), 'The Digital Personal Data Protection Act, 2023', Act No. 22 of 2023, Ministry of Law and Justice, New Delhi.",
-    "Gutowski T., Dahmus J. and Thiriez A. (2006), 'Electrical energy requirements for manufacturing processes', Proc. 13th CIRP International Conference on Life Cycle Engineering, Leuven, pp. 623-628.",
-    "Gutowski T., Murphy C., Allen D., Bauer D., Bras B., Piwonka T., Sheng P., Sutherland J., Thurston D. and Wolff E. (2005), 'Environmentally benign manufacturing: observations from Japan, Europe and the United States', Journal of Cleaner Production, Vol. 13, No. 1, pp. 1-17.",
+    "Gutowski T., Dahmus J. and Thiriez A. (2006), 'Electrical energy requirements for manufacturing processes', Proc. 13th CIRP International Conference on Life Cycle Engineering, Leuven, pp.623-628.",
+    "Gutowski T., Murphy C., Allen D., Bauer D., Bras B., Piwonka T., Sheng P., Sutherland J., Thurston D. and Wolff E. (2005), 'Environmentally benign manufacturing: observations from Japan, Europe and the United States', Journal of Cleaner Production, Vol. 13, No.1, pp.1-17.",
     "HEIDENHAIN (2011), 'Aspects of energy efficiency in machine tools', Technical Information, Dr. Johannes Heidenhain GmbH, Traunreut.",
     "ISO (2014a), 'ISO 50006:2014 Energy management systems: Measuring energy performance using energy baselines and energy performance indicators', International Organization for Standardization, Geneva.",
     "ISO (2014b), 'ISO 50015:2014 Energy management systems: Measurement and verification of energy performance of organizations', International Organization for Standardization, Geneva.",
     "ISO (2017), 'ISO 14955-1:2017 Machine tools: Environmental evaluation of machine tools, Part 1: Design methodology for energy-efficient machine tools', International Organization for Standardization, Geneva.",
     "ISO (2018), 'ISO 50001:2018 Energy management systems: Requirements with guidance for use', International Organization for Standardization, Geneva.",
-    "Kara S. and Li W. (2011), 'Unit process energy consumption models for material removal processes', CIRP Annals - Manufacturing Technology, Vol. 60, No. 1, pp. 37-40.",
-    "Kong M., Dong B., Zhang R. and O'Neill Z. (2022), 'HVAC energy savings, thermal comfort and air quality for occupant-centric control through a side-by-side experimental study', Applied Energy, Vol. 306, 117987.",
-    "Li W., Zein A., Kara S. and Herrmann C. (2011), 'An investigation into fixed energy consumption of machine tools', Proc. 18th CIRP International Conference on Life Cycle Engineering, Braunschweig, pp. 268-273.",
-    "Lin G., Casillas A., Sheng M. and Granderson J. (2023), 'Performance evaluation of an occupancy-based HVAC control system in an office building', Energies, Vol. 16, No. 20, 7088.",
-    "Mori M., Fujishima M., Inamasu Y. and Oda Y. (2011), 'A study on energy efficiency improvement for machine tools', CIRP Annals - Manufacturing Technology, Vol. 60, No. 1, pp. 145-148.",
-    "Mouzon G., Yildirim M.B. and Twomey J. (2007), 'Operational methods for minimization of energy consumption of manufacturing equipment', International Journal of Production Research, Vol. 45, No. 18-19, pp. 4247-4271.",
+    "Kara S. and Li W. (2011), 'Unit process energy consumption models for material removal processes', CIRP Annals - Manufacturing Technology, Vol. 60, No.1, pp.37-40.",
+    "Kong M., Dong B., Zhang R. and O'Neill Z. (2022), 'HVAC energy savings, thermal comfort and air quality for occupant-centric control through a side-by-side experimental study', Applied Energy, Vol. 306, Paper No.117987.",
+    "Li W., Zein A., Kara S. and Herrmann C. (2011), 'An investigation into fixed energy consumption of machine tools', Proc. 18th CIRP International Conference on Life Cycle Engineering, Braunschweig, pp.268-273.",
+    "Lin G., Casillas A., Sheng M. and Granderson J. (2023), 'Performance evaluation of an occupancy-based HVAC control system in an office building', Energies, Vol. 16, No.20, Paper No.7088.",
+    "Mori M., Fujishima M., Inamasu Y. and Oda Y. (2011), 'A study on energy efficiency improvement for machine tools', CIRP Annals - Manufacturing Technology, Vol. 60, No.1, pp.145-148.",
+    "Mouzon G., Yildirim M.B. and Twomey J. (2007), 'Operational methods for minimization of energy consumption of manufacturing equipment', International Journal of Production Research, Vol. 45, No.18-19, pp.4247-4271.",
     "NVIDIA Corporation (2021), 'DeepStream SDK 6.0.1 Developer Guide', NVIDIA, Santa Clara.",
     "OASIS (2019), 'MQTT Version 5.0', OASIS Standard, 7 March 2019.",
     "PROFIBUS and PROFINET International (2024), 'PROFIenergy: energy management for PROFINET devices', Technology description, PI, Karlsruhe.",
-    "Squeo M., Frigerio N. and Matta A. (2019), 'Multiple sleeping states for energy saving in CNC machining centers', Procedia CIRP, Vol. 80, pp. 144-149.",
+    "Squeo M., Frigerio N. and Matta A. (2019), 'Multiple sleeping states for energy saving in CNC machining centers', Procedia CIRP, Vol. 80, pp.144-149.",
     "Suzuki R., Kohmoto S. and Ogatsu T. (2017), 'Non-intrusive condition monitoring for manufacturing systems', Proc. 25th European Signal Processing Conference (EUSIPCO), Kos.",
-    "Tamil Nadu Electricity Regulatory Commission (2025), 'Tariff Order No. 6 of 2025', TNERC, Chennai, 30 June 2025.",
-    "Tien P.W., Wei S., Calautit J.K., Darkwa J. and Wood C. (2021), 'A computer vision-based occupancy and equipment usage detection approach for reducing building energy demand', Energies, Vol. 14, No. 1, 156.",
+    "Tamil Nadu Electricity Regulatory Commission (2025), 'Tariff Order No.6 of 2025', TNERC, Chennai, 30 June 2025.",
+    "Tien P.W., Wei S., Calautit J.K., Darkwa J. and Wood C. (2021), 'A computer vision-based occupancy and equipment usage detection approach for reducing building energy demand', Energies, Vol. 14, No.1, Paper No.156.",
     "U.S. Department of Energy (2003), 'Improving compressed air system performance: a sourcebook for industry', Industrial Technologies Program and Compressed Air Challenge, Washington DC.",
-    "Williams A., Atkinson B., Garbesi K., Page E. and Rubinstein F. (2012), 'Lighting controls in commercial buildings', LEUKOS, Vol. 8, No. 3, pp. 161-180.",
-    "Zhang Y., Calautit J.K., Tien P.W., Wu Y. and Wei S. (2024), 'Deep learning models for vision-based occupancy detection in high occupancy buildings', Journal of Building Engineering, Vol. 98, 111355.",
+    "Williams A., Atkinson B., Garbesi K., Page E. and Rubinstein F. (2012), 'Lighting controls in commercial buildings', LEUKOS, Vol. 8, No.3, pp.161-180.",
+    "Zhang Y., Calautit J.K., Tien P.W., Wu Y. and Wei S. (2024), 'Deep learning models for vision-based occupancy detection in high occupancy buildings', Journal of Building Engineering, Vol. 98, Paper No.111355.",
 ]
 for i, ref in enumerate(sorted(REFS, key=str.lower), 1):
     p = para(f"{i}.\t{ref}", "Ref")

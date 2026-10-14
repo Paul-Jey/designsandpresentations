@@ -26,7 +26,7 @@ The pipeline is summarised in <<tab:pipe>>. Frames from the camera are read thro
 
 @tab pipe
 
-The probe function walks through the object metadata of each frame and counts the objects of the person class whose confidence exceeds the threshold set in the nvinfer configuration file. The raw count is passed to the temporal filter described in Section 3.6. Once a second, the filtered count, the resulting state and the modelled power are written to a small JSON file, live_state.json, which is read by the dashboard. The core of the probe function and the filter is listed in Appendix 2.
+The probe function walks through the object metadata of each frame and counts the objects of the person class whose confidence exceeds the threshold set in the nvinfer configuration file. The raw count is passed to the temporal filter described in Section 3.5. Once a second, the filtered count, the resulting state and the modelled power are written to a small JSON file, live_state.json, which is read by the dashboard. The core of the probe function and the filter is listed in Appendix 2.
 
 Writing a small file once a second, rather than sending every detection, keeps the interface between the vision code and the rest of the system simple. Any other program, whether a dashboard, an MQTT client or a controller, only needs to read one file with a fixed structure.
 

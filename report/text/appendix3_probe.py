@@ -3,7 +3,7 @@ import pyds
 from gi.repository import Gst
 
 PERSON_CLASS_ID = 2          # ResNet10 reference detector: car, bicycle, person, roadsign
-RISE_S, FALL_S = 10, 60      # asymmetric persistence filter (Section 3.6)
+RISE_S, FALL_S = 10, 60      # asymmetric persistence filter (Section 3.5)
 
 
 class PresenceFilter:
